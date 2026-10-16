@@ -1,0 +1,735 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Halloween Treasure Hunt 🎃</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Nunito:wght@400;700;900&display=swap');
+
+:root {
+  --orange: #ff7518;
+  --purple: #8b35c9;
+  --bg: #100b19;
+  --panel: #1b1428;
+  --white: #fff3e6;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--white);
+  font-family: 'Nunito', sans-serif;
+  background:
+    radial-gradient(ellipse at top, #382044 0%, transparent 55%),
+    var(--bg);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "✦   ·    ✧       ·     ✦";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .16;
+  font-size: 35px;
+  letter-spacing: 30px;
+  line-height: 100px;
+  overflow: hidden;
+  z-index: -1;
+}
+
+header {
+  padding: 22px;
+  text-align: center;
+  border-bottom: 1px solid #ffffff14;
+}
+
+.brand {
+  color: var(--orange);
+  letter-spacing: 4px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+#progress {
+  margin-top: 13px;
+  color: #c5afda;
+  font-size: 12px;
+}
+
+.progress-track {
+  height: 5px;
+  max-width: 360px;
+  background: #ffffff15;
+  border-radius: 20px;
+  margin: 10px auto 0;
+  overflow: hidden;
+}
+
+#progressBar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--purple), var(--orange));
+  transition: width .5s;
+}
+
+main {
+  width: min(520px, 100%);
+  padding: 24px 18px 50px;
+  margin: auto;
+}
+
+.screen {
+  display: none;
+  text-align: center;
+  animation: appear .5s ease;
+}
+
+.screen.active { display: block; }
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.eyebrow {
+  color: var(--orange);
+  font-size: 11px;
+  letter-spacing: 3px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+h1, h2 {
+  font-family: 'Creepster', cursive;
+  font-weight: 400;
+  line-height: 1.12;
+}
+
+h1 {
+  font-size: clamp(43px, 11vw, 68px);
+  margin: 18px 0;
+  color: var(--orange);
+  text-shadow: 0 0 25px #ff751838;
+}
+
+h2 { font-size: 36px; margin: 18px 0; }
+
+p {
+  color: #cbbdd8;
+  line-height: 1.7;
+}
+
+.hero {
+  font-size: 100px;
+  margin: 12px 0;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 22px #ff75184a);
+}
+
+@keyframes float {
+  50% { transform: translateY(-12px) rotate(4deg); }
+}
+
+.card {
+  padding: 25px 20px;
+  margin-top: 20px;
+  background: linear-gradient(145deg, #241831, #171020);
+  border: 1px solid #ffffff17;
+  border-radius: 18px;
+  box-shadow: 0 18px 50px #0005;
+}
+
+button, input {
+  font-family: inherit;
+  width: 100%;
+  border-radius: 10px;
+  padding: 15px;
+  font-size: 14px;
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid #ffffff20;
+  color: var(--white);
+  background: #ffffff09;
+  font-weight: 900;
+  transition: .2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  border-color: var(--orange);
+  background: #ff751815;
+}
+
+.primary {
+  background: var(--orange);
+  color: #1a0d12;
+  border-color: var(--orange);
+}
+
+.primary:hover { background: #ff934d; }
+
+.options {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.option { text-align: left; }
+
+input {
+  margin: 10px 0;
+  color: white;
+  background: #100b19;
+  border: 1px solid #554365;
+  outline: none;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+input:focus { border-color: var(--orange); }
+
+.clue-icon {
+  font-size: 70px;
+  margin: 12px 0;
+}
+
+.clue-box {
+  background: #ff751810;
+  border: 1px dashed #ff75186b;
+  padding: 17px;
+  margin: 20px 0;
+  border-radius: 12px;
+}
+
+.clue-title {
+  color: var(--orange);
+  font-weight: 900;
+  font-size: 20px;
+}
+
+.small {
+  font-size: 12px;
+  color: #a897b8;
+}
+
+#feedback {
+  min-height: 24px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.good { color: #71efaa !important; }
+.bad { color: #ff7272 !important; }
+
+.pumpkin {
+  font-size: 140px;
+  cursor: pointer;
+  display: inline-block;
+  user-select: none;
+  filter: drop-shadow(0 0 18px #ff75183d);
+  transition: transform .15s, filter .15s;
+}
+
+.pumpkin:hover { transform: scale(1.06); }
+.pumpkin:active { transform: scale(.90) rotate(-5deg); }
+
+#hitCount {
+  color: var(--orange);
+  font-weight: 900;
+  font-size: 15px;
+}
+
+#finalClue { display: none; }
+
+#qr {
+  display: inline-block;
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  margin: 20px 0;
+  min-width: 200px;
+  min-height: 200px;
+}
+
+#qr img, #qr canvas {
+  display: block;
+  max-width: 100%;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #786985;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.bat {
+  display: inline-block;
+  animation: fly 3s infinite alternate ease-in-out;
+}
+
+@keyframes fly {
+  to { transform: translateX(15px) rotate(8deg); }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">☠ NIGHTFALL • HALLOWEEN ☠</div>
+  <div id="progress">THE HAUNT BEGINS</div>
+  <div class="progress-track">
+    <div id="progressBar"></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- INTRO -->
+  <section class="screen active" id="intro">
+    <div class="hero">🎃</div>
+    <div class="eyebrow">October 31 • A mysterious adventure</div>
+    <h1>The Halloween Hunt</h1>
+    <p>
+      The night is dark. The pumpkins are watching.
+      Somewhere nearby, a sweet treasure is waiting...
+    </p>
+
+    <div class="card">
+      <span class="bat">🦇</span>
+      <h2>A little warning...</h2>
+      <p>
+        To claim your reward, you must solve riddles,
+        discover hidden codes, and follow mysterious clues.
+        Every answer brings you closer to the prize.
+      </p>
+      <p><b>Think carefully. Explore safely. Trust no ghost.</b></p>
+      <button class="primary" onclick="startHunt()">
+        ENTER IF YOU DARE →
+      </button>
+    </div>
+    <p class="small">YOUR DESTINY IS SEALED...</p>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="screen" id="quiz">
+    <div class="eyebrow" id="questionNumber">TRIAL 01</div>
+    <h2 id="questionTitle">A Halloween Riddle</h2>
+    <p id="questionText"></p>
+    <div class="options" id="options"></div>
+    <p id="feedback" aria-live="polite"></p>
+  </section>
+
+  <!-- CLUE AND CODE -->
+  <section class="screen" id="clue">
+    <div class="eyebrow">SECRET LOCATION DISCOVERED</div>
+    <div class="clue-icon" id="clueIcon">🪴</div>
+    <h2>Your Next Clue</h2>
+    <p>Search the location below for a hidden secret code.</p>
+
+    <div class="clue-box">
+      <div class="clue-title" id="clueName">Planters</div>
+      <p id="clueDescription"></p>
+    </div>
+
+    <p class="small">FOUND THE CODE? ENTER IT BELOW.</p>
+    <form onsubmit="redeemCode(event)">
+      <input id="codeInput" autocomplete="off"
+        placeholder="ENTER SECRET CODE" required>
+      <button class="primary" type="submit">UNLOCK THE NEXT TRIAL →</button>
+    </form>
+    <p id="codeFeedback" aria-live="polite"></p>
+  </section>
+
+  <!-- CELEBRATION -->
+  <section class="screen" id="celebration">
+    <div class="eyebrow">ALL TRIALS COMPLETED</div>
+    <h1>You Made It!</h1>
+    <p>But your treasure is still locked. One final challenge awaits...</p>
+
+    <div class="card">
+      <h2>Break the Curse!</h2>
+      <p>Click the pumpkin <b>8 times</b> to shatter its magic.</p>
+      <div class="pumpkin" id="pumpkin"
+        role="button" tabindex="0"
+        aria-label="Smash the pumpkin"
+        onclick="smashPumpkin()">🎃</div>
+      <div id="hitCount">0 / 8 HITS</div>
+      <div class="progress-track">
+        <div id="pumpkinBar"
+          style="height:100%;width:0%;background:#ff7518;transition:width .2s"></div>
+      </div>
+      <p id="pumpkinMessage">The pumpkin is laughing at you...</p>
+
+      <div id="finalClue">
+        <div class="clue-box">
+          <div class="clue-title">🌳 THE FINAL LOCATION</div>
+          <p>
+            Your last clue: <b>A TREE.</b><br>
+            Find the hidden code near a tree to claim your sweet reward!
+          </p>
+        </div>
+
+        <form onsubmit="redeemFinal(event)">
+          <input id="finalCodeInput" autocomplete="off"
+            placeholder="FINAL SECRET CODE" required>
+          <button class="primary" type="submit">CLAIM MY TREASURE 🍬</button>
+        </form>
+        <p id="finalFeedback" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WINNER -->
+  <section class="screen" id="winner">
+    <div class="hero">🏆</div>
+    <div class="eyebrow">MISSION ACCOMPLISHED</div>
+    <h1>YOU WON!</h1>
+    <div class="card">
+      <div style="font-size:65px">🍬🍫🍭</div>
+      <h2>Sweet Victory!</h2>
+      <p>
+        Congratulations, brave hunter!
+        You solved every riddle, discovered every secret,
+        and survived the Halloween challenge.
+      </p>
+      <h2 style="color:#ff7518">YOU HAVE WON A CANDY PACK!</h2>
+      <p>Show this QR code to claim your prize.</p>
+      <div id="qr" aria-label="Winner verification QR code"></div>
+      <p class="small">HALLOWEEN TREASURE HUNT • WINNER VERIFIED</p>
+      <button onclick="downloadQR()">SAVE WINNER QR CODE ↓</button>
+    </div>
+  </section>
+
+</main>
+
+<footer>MADE FOR A NIGHT OF MYSTERY • 🎃 • HAPPY HALLOWEEN</footer>
+
+<!-- QR generator -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+/*
+  ORGANIZER SETTINGS
+  Change these codes to match the codes hidden at each location.
+  Keep the codes secret from the players.
+*/
+
+const LOCATION_CODES = [
+  "PUMPKIN13",  // Planters
+  "GHOST27",    // Benches
+  "RIDDLE44",   // O'Higgins bust
+  "NIGHT81"    // Trees
+];
+
+const FINAL_CODE = "SWEET66";
+
+// Edit the questions and answers here if desired.
+const QUESTIONS = [
+  {
+    title: "The Witch's Riddle",
+    text: "What do people traditionally carve into a lantern for Halloween?",
+    answers: ["A watermelon", "A pumpkin", "An apple", "A pineapple"],
+    correct: 1
+  },
+  {
+    title: "The Ghost's Challenge",
+    text: "Which creature is said to turn into a bat?",
+    answers: ["A vampire", "A scarecrow", "A mummy", "A skeleton"],
+    correct: 0
+  },
+  {
+    title: "The Witching Hour",
+    text: "What do witches traditionally ride?",
+    answers: ["A broomstick", "A bicycle", "A skateboard", "A train"],
+    correct: 0
+  },
+  {
+    title: "The Final Trial",
+    text: "What phrase do children say when asking for Halloween candy?",
+    answers: ["Happy birthday!", "Trick or treat!", "Good morning!", "See you soon!"],
+    correct: 1
+  }
+];
+
+const LOCATIONS = [
+  {
+    name: "Planters",
+    icon: "🪴",
+    description: "Look around the planters. Your first hidden code is waiting nearby."
+  },
+  {
+    name: "Benches",
+    icon: "🪑",
+    description: "Take a seat... if you dare. Search around the benches for the next code."
+  },
+  {
+    name: "The Bust of O'Higgins",
+    icon: "🗿",
+    description: "Find the bust of O'Higgins. Look nearby for a secret left by the spirits."
+  },
+  {
+    name: "Trees",
+    icon: "🌳",
+    description: "Look carefully around the trees. Nature is hiding your next secret."
+  }
+];
+
+let questionIndex = 0;
+let locationIndex = 0;
+let pumpkinHits = 0;
+let currentQuestionSolved = false;
+let currentScreen = "intro";
+
+function showScreen(id, progress, label) {
+  document.querySelectorAll(".screen").forEach(s =>
+    s.classList.remove("active")
+  );
+  document.getElementById(id).classList.add("active");
+  currentScreen = id;
+  document.getElementById("progress").textContent = label;
+  document.getElementById("progressBar").style.width = progress + "%";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function startHunt() {
+  questionIndex = 0;
+  locationIndex = 0;
+  showQuestion();
+}
+
+function showQuestion() {
+  currentQuestionSolved = false;
+  const q = QUESTIONS[questionIndex];
+
+  showScreen(
+    "quiz",
+    Math.round((questionIndex / QUESTIONS.length) * 75),
+    "TRIAL " + (questionIndex + 1) + " OF " + QUESTIONS.length
+  );
+
+  document.getElementById("questionNumber").textContent =
+    "TRIAL " + String(questionIndex + 1).padStart(2, "0");
+
+  document.getElementById("questionTitle").textContent = q.title;
+  document.getElementById("questionText").textContent = q.text;
+  document.getElementById("feedback").textContent = "";
+  document.getElementById("feedback").className = "";
+
+  const options = document.getElementById("options");
+  options.innerHTML = "";
+
+  q.answers.forEach((answer, index) => {
+    const button = document.createElement("button");
+    button.className = "option";
+    button.textContent = answer;
+    button.onclick = () => checkAnswer(index);
+    options.appendChild(button);
+  });
+}
+
+function checkAnswer(index) {
+  if (currentQuestionSolved) return;
+
+  const q = QUESTIONS[questionIndex];
+  const feedback = document.getElementById("feedback");
+
+  if (index !== q.correct) {
+    feedback.textContent = "❌ Wrong answer! The spirits say: try again...";
+    feedback.className = "bad";
+    return;
+  }
+
+  currentQuestionSolved = true;
+  feedback.textContent = "✨ CORRECT! The magic reveals a new clue...";
+  feedback.className = "good";
+
+  setTimeout(showClue, 850);
+}
+
+function showClue() {
+  const location = LOCATIONS[locationIndex];
+
+  showScreen(
+    "clue",
+    15 + locationIndex * 15,
+    "HIDDEN CODE " + (locationIndex + 1) + " OF " + LOCATIONS.length
+  );
+
+  document.getElementById("clueIcon").textContent = location.icon;
+  document.getElementById("clueName").textContent = location.name;
+  document.getElementById("clueDescription").textContent =
+    location.description;
+
+  document.getElementById("codeInput").value = "";
+  document.getElementById("codeFeedback").textContent = "";
+  document.getElementById("codeFeedback").className = "";
+}
+
+function redeemCode(event) {
+  event.preventDefault();
+
+  const entered = document.getElementById("codeInput").value.trim().toUpperCase();
+  const feedback = document.getElementById("codeFeedback");
+
+  if (entered !== LOCATION_CODES[locationIndex]) {
+    feedback.textContent = "🚫 Incorrect code! Keep searching.";
+    feedback.className = "bad";
+    return;
+  }
+
+  feedback.textContent = "🔓 CODE ACCEPTED!";
+  feedback.className = "good";
+
+  locationIndex++;
+
+  setTimeout(() => {
+    if (locationIndex < LOCATIONS.length) {
+      questionIndex++;
+      showQuestion();
+    } else {
+      showCelebration();
+    }
+  }, 700);
+}
+
+function showCelebration() {
+  pumpkinHits = 0;
+  document.getElementById("pumpkin").textContent = "🎃";
+  document.getElementById("pumpkin").style.filter = "";
+  document.getElementById("hitCount").textContent = "0 / 8 HITS";
+  document.getElementById("pumpkinBar").style.width = "0%";
+  document.getElementById("pumpkinMessage").textContent =
+    "The pumpkin is laughing at you...";
+  document.getElementById("finalClue").style.display = "none";
+  document.getElementById("finalCodeInput").value = "";
+  document.getElementById("finalFeedback").textContent = "";
+
+  showScreen("celebration", 85, "THE FINAL CHALLENGE");
+}
+
+function smashPumpkin() {
+  if (pumpkinHits >= 8) return;
+
+  pumpkinHits++;
+
+  document.getElementById("hitCount").textContent =
+    pumpkinHits + " / 8 HITS";
+
+  document.getElementById("pumpkinBar").style.width =
+    (pumpkinHits / 8 * 100) + "%";
+
+  const pumpkin = document.getElementById("pumpkin");
+
+  if (pumpkinHits < 8) {
+    pumpkin.style.transform =
+      "rotate(" + (Math.random() * 24 - 12) + "deg) scale(" +
+      (0.95 + Math.random() * 0.12) + ")";
+
+    document.getElementById("pumpkinMessage").textContent =
+      ["It's cracking!", "Keep going!", "The curse is weakening!",
+       "Almost there!", "The pumpkin is terrified!"][pumpkinHits % 5];
+  } else {
+    pumpkin.textContent = "💥";
+    pumpkin.style.transform = "scale(1.25)";
+    pumpkin.style.filter = "drop-shadow(0 0 30px #ff7518)";
+    document.getElementById("pumpkinMessage").textContent =
+      "🎉 BOOM! The pumpkin's curse is broken!";
+    document.getElementById("finalClue").style.display = "block";
+    document.getElementById("progress").textContent = "FINAL LOCATION REVEALED";
+    document.getElementById("progressBar").style.width = "95%";
+  }
+}
+
+// Also allow keyboard activation for the pumpkin.
+document.getElementById("pumpkin").addEventListener("keydown", event => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    smashPumpkin();
+  }
+});
+
+function redeemFinal(event) {
+  event.preventDefault();
+
+  const entered = document.getElementById("finalCodeInput").value.trim().toUpperCase();
+  const feedback = document.getElementById("finalFeedback");
+
+  if (pumpkinHits < 8) {
+    feedback.textContent = "Break the pumpkin first!";
+    feedback.className = "bad";
+    return;
+  }
+
+  if (entered !== FINAL_CODE) {
+    feedback.textContent = "❌ Wrong code! Search around the tree again.";
+    feedback.className = "bad";
+    return;
+  }
+
+  showWinner();
+}
+
+function showWinner() {
+  showScreen("winner", 100, "TREASURE CLAIMED!");
+
+  const qr = document.getElementById("qr");
+  qr.innerHTML = "";
+
+  const winnerMessage =
+    "HALLOWEEN TREASURE HUNT\n" +
+    "WINNER VERIFIED\n" +
+    "PRIZE: ONE CANDY PACK\n" +
+    "Congratulations! You completed the hunt.";
+
+  if (typeof QRCode !== "undefined") {
+    new QRCode(qr, {
+      text: winnerMessage,
+      width: 200,
+      height: 200,
+      colorDark: "#180f20",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  } else {
+    qr.textContent =
+      "QR generator unavailable. Please reconnect to the internet and reload.";
+  }
+}
+
+function downloadQR() {
+  const qr = document.getElementById("qr");
+  const canvas = qr.querySelector("canvas");
+  const img = qr.querySelector("img");
+
+  let url = "";
+
+  if (canvas) url = canvas.toDataURL("image/png");
+  else if (img) url = img.src;
+
+  if (!url) {
+    alert("The QR code is not ready yet. Please try again.");
+    return;
+  }
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "halloween-winner.png";
+  link.click();
+}
+</script>
+
+</body>
+  </html>
+        
