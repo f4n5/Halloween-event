@@ -1,548 +1,937 @@
-HTML
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Halloween Treasure Hunt 🎃</title>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Nunito:wght@400;700;900&display=swap');
 
-:root{--orange:#ff7518;--bg:#100b19;--panel:#21172d;--text:#fff3e6}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#402047,var(--bg) 65%);color:var(--text);font-family:Nunito,sans-serif}
-header{text-align:center;padding:22px 12px;border-bottom:1px solid #ffffff20}
-.brand{color:var(--orange);font-size:12px;letter-spacing:3px;font-weight:900}
-#progress{font-size:12px;color:#cbbdd8;margin-top:12px}
-.track{height:5px;max-width:350px;margin:10px auto;background:#ffffff18;border-radius:8px;overflow:hidden}
-#bar,#pumpkinBar{height:100%;width:0;background:linear-gradient(90deg,#8b35c9,#ff7518);transition:width .3s}
-#musicButton{position:fixed;right:10px;top:10px;width:auto;padding:10px;z-index:5;background:#21172d}
-main{max-width:520px;margin:auto;padding:25px 16px 45px}
-.screen{display:none;text-align:center;animation:appear .35s ease}
-.screen.active{display:block}
-@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-h1,h2{font-family:Creepster,cursive;font-weight:400}
-h1{font-size:clamp(44px,11vw,68px);color:var(--orange);margin:18px 0}
-h2{font-size:35px;margin:18px 0}
-p{color:#cbbdd8;line-height:1.7}
-.hero{font-size:90px;margin:18px 0}
-.eyebrow{font-size:11px;letter-spacing:3px;font-weight:900;color:var(--orange)}
-.card{margin-top:20px;padding:24px 18px;border:1px solid #ffffff18;border-radius:16px;background:linear-gradient(145deg,#281b35,#171020);box-shadow:0 15px 40px #0004}
-button,input{width:100%;padding:14px;border-radius:9px;font-family:inherit;font-size:14px}
-button{cursor:pointer;color:var(--text);background:#ffffff09;border:1px solid #ffffff25;font-weight:900;transition:background .2s,border-color .2s}
-button:hover{border-color:var(--orange);background:#ff751818}
-button:active{transform:scale(.98)}
-.primary{background:var(--orange);color:#1a0d12;border-color:var(--orange)}
-.primary:hover{background:#ff934d}
-.options{display:grid;gap:10px;margin-top:20px}
-.option{text-align:left}
-input{margin:10px 0;color:white;background:#100b19;border:1px solid #655071;text-align:center;text-transform:uppercase;outline:none}
-input:focus{border-color:var(--orange)}
-#feedback,#codeFeedback,#finalFeedback{min-height:22px;font-size:13px;font-weight:900}
-.good{color:#71efaa!important}.bad{color:#ff7272!important}
-.clue-icon{font-size:72px;margin:14px 0}
-.clue-box{padding:17px;margin:20px 0;background:#ff751810;border:1px dashed #ff75186b;border-radius:12px}
-.clue-title{font-size:20px;color:var(--orange);font-weight:900}
-.small{font-size:12px;color:#a897b8}
-.pumpkin{display:inline-block;font-size:125px;cursor:pointer;user-select:none;touch-action:manipulation;transition:transform .12s}
-.pumpkin:active{transform:scale(.88) rotate(-6deg)}
-#hitCount{color:var(--orange);font-weight:900}
-#finalStage{display:none}
-.qr-box{display:flex;align-items:center;justify-content:center;background:white;color:#222;min-height:220px;min-width:220px;max-width:100%;width:max-content;padding:10px;margin:18px auto;border-radius:10px}
-.qr-box canvas,.qr-box img{max-width:100%;height:auto}
-footer{text-align:center;padding:25px;color:#786985;font-size:11px;letter-spacing:2px}
+:root {
+  --orange: #ff7518;
+  --purple: #8b35c9;
+  --bg: #100b19;
+  --panel: #1b1428;
+  --white: #fff3e6;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--white);
+  font-family: 'Nunito', sans-serif;
+  background:
+    radial-gradient(ellipse at top, #382044 0%, transparent 55%),
+    var(--bg);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "✦   ·    ✧       ·     ✦";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .16;
+  font-size: 35px;
+  letter-spacing: 30px;
+  line-height: 100px;
+  overflow: hidden;
+  z-index: -1;
+}
+
+header {
+  padding: 22px;
+  text-align: center;
+  border-bottom: 1px solid #ffffff14;
+}
+
+.brand {
+  color: var(--orange);
+  letter-spacing: 4px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+#progress {
+  margin-top: 13px;
+  color: #c5afda;
+  font-size: 12px;
+}
+
+.progress-track {
+  height: 5px;
+  max-width: 360px;
+  background: #ffffff15;
+  border-radius: 20px;
+  margin: 10px auto 0;
+  overflow: hidden;
+}
+
+#progressBar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--purple), var(--orange));
+  transition: width .5s;
+}
+
+main {
+  width: min(520px, 100%);
+  padding: 24px 18px 50px;
+  margin: auto;
+}
+
+.screen {
+  display: none;
+  text-align: center;
+  animation: appear .5s ease;
+}
+
+.screen.active { display: block; }
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.eyebrow {
+  color: var(--orange);
+  font-size: 11px;
+  letter-spacing: 3px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+h1, h2 {
+  font-family: 'Creepster', cursive;
+  font-weight: 400;
+  line-height: 1.12;
+}
+
+h1 {
+  font-size: clamp(43px, 11vw, 68px);
+  margin: 18px 0;
+  color: var(--orange);
+  text-shadow: 0 0 25px #ff751838;
+}
+
+h2 { font-size: 36px; margin: 18px 0; }
+
+p {
+  color: #cbbdd8;
+  line-height: 1.7;
+}
+
+.hero {
+  font-size: 100px;
+  margin: 12px 0;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 22px #ff75184a);
+}
+
+@keyframes float {
+  50% { transform: translateY(-12px) rotate(4deg); }
+}
+
+.card {
+  padding: 25px 20px;
+  margin-top: 20px;
+  background: linear-gradient(145deg, #241831, #171020);
+  border: 1px solid #ffffff17;
+  border-radius: 18px;
+  box-shadow: 0 18px 50px #0005;
+}
+
+button, input {
+  font-family: inherit;
+  width: 100%;
+  border-radius: 10px;
+  padding: 15px;
+  font-size: 14px;
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid #ffffff20;
+  color: var(--white);
+  background: #ffffff09;
+  font-weight: 900;
+  transition: .2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  border-color: var(--orange);
+  background: #ff751815;
+}
+
+button:disabled {
+  opacity: .65;
+  cursor: not-allowed;
+}
+
+.primary {
+  background: var(--orange);
+  color: #1a0d12;
+  border-color: var(--orange);
+}
+
+.primary:hover { background: #ff934d; }
+
+.options {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.option { text-align: left; }
+
+input {
+  margin: 10px 0;
+  color: white;
+  background: #100b19;
+  border: 1px solid #554365;
+  outline: none;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+input:focus { border-color: var(--orange); }
+
+.clue-icon {
+  font-size: 70px;
+  margin: 12px 0;
+}
+
+.clue-box {
+  background: #ff751810;
+  border: 1px dashed #ff75186b;
+  padding: 17px;
+  margin: 20px 0;
+  border-radius: 12px;
+}
+
+.clue-title {
+  color: var(--orange);
+  font-weight: 900;
+  font-size: 20px;
+}
+
+.small {
+  font-size: 12px;
+  color: #a897b8;
+}
+
+#feedback, #codeFeedback, #finalFeedback {
+  min-height: 24px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.good { color: #71efaa !important; }
+.bad { color: #ff7272 !important; }
+
+.pumpkin {
+  font-size: 140px;
+  cursor: pointer;
+  display: inline-block;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  filter: drop-shadow(0 0 18px #ff75183d);
+  transition: transform .15s, filter .15s;
+}
+
+.pumpkin:hover { transform: scale(1.06); }
+.pumpkin:active { transform: scale(.90) rotate(-5deg); }
+
+#hitCount {
+  color: var(--orange);
+  font-weight: 900;
+  font-size: 15px;
+}
+
+#finalClue { display: none; }
+
+#qr, #staffQR {
+  display: inline-block;
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  margin: 20px 0;
+  min-width: 200px;
+  min-height: 200px;
+}
+
+#qr img, #qr canvas,
+#staffQR img, #staffQR canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.music-button {
+  width: auto;
+  position: fixed;
+  z-index: 5;
+  right: 12px;
+  bottom: 12px;
+  padding: 12px 15px;
+  background: #241831;
+  border-color: #ff75186b;
+  box-shadow: 0 5px 20px #0008;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #786985;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.bat {
+  display: inline-block;
+  animation: fly 3s infinite alternate ease-in-out;
+}
+
+@keyframes fly {
+  to { transform: translateX(15px) rotate(8deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
 </style>
 </head>
-<body>
 
-<button id="musicButton" type="button">🔇 SOUND OFF</button>
+<body>
 
 <header>
   <div class="brand">☠ NIGHTFALL • HALLOWEEN ☠</div>
   <div id="progress">THE HAUNT BEGINS</div>
-  <div class="track"><div id="bar"></div></div>
+  <div class="progress-track">
+    <div id="progressBar"></div>
+  </div>
 </header>
 
 <main>
-<section class="screen active" id="intro">
-  <div class="hero">🎃</div>
-  <div class="eyebrow">A MYSTERIOUS HALLOWEEN ADVENTURE</div>
-  <h1>The Halloween Hunt</h1>
-  <p>The night is dark. The pumpkins are watching. Somewhere nearby, a sweet treasure awaits...</p>
-  <div class="card">
-    <div style="font-size:45px">🦇</div>
-    <h2>A Little Warning...</h2>
-    <p>Solve the riddles, discover hidden codes, and survive the challenges.</p>
-    <p><b>Think carefully. Explore safely. Trust no ghost.</b></p>
-    <button class="primary" id="startButton" type="button">ENTER IF YOU DARE →</button>
-  </div>
-  <p class="small">TURN ON SOUND FOR THE FULL EXPERIENCE</p>
-</section>
 
-<section class="screen" id="quiz">
-  <div class="eyebrow" id="questionNumber">TRIAL 01</div>
-  <h2 id="questionTitle"></h2>
-  <p id="questionText"></p>
-  <div class="options" id="options"></div>
-  <p id="feedback" aria-live="polite"></p>
-</section>
+  <section class="screen active" id="intro">
+    <div class="hero">🎃</div>
+    <div class="eyebrow">October 31 • A mysterious adventure</div>
+    <h1>The Halloween Hunt</h1>
+    <p>
+      The night is dark. The pumpkins are watching.
+      Somewhere nearby, a sweet treasure is waiting...
+    </p>
 
-<section class="screen" id="clue">
-  <div class="eyebrow">SECRET LOCATION DISCOVERED</div>
-  <div class="clue-icon" id="clueIcon">🌷</div>
-  <h2>Your Next Clue</h2>
-  <p>Search the location for a hidden secret code.</p>
-  <div class="clue-box">
-    <div class="clue-title" id="clueName"></div>
-    <p id="clueDescription"></p>
-  </div>
-  <p class="small">FOUND THE CODE? ENTER IT BELOW.</p>
-  <form id="codeForm">
-    <input id="codeInput" autocomplete="off" placeholder="ENTER SECRET CODE" required>
-    <button class="primary" type="submit">UNLOCK THE NEXT TRIAL →</button>
-  </form>
-  <p id="codeFeedback" aria-live="polite"></p>
-</section>
-
-<section class="screen" id="celebration">
-  <div class="eyebrow">ALL TRIALS COMPLETED</div>
-  <h1>You Made It!</h1>
-  <p>One final challenge remains. Break the pumpkin's curse!</p>
-  <div class="card">
-    <h2>Smash the Pumpkin!</h2>
-    <p>Click the pumpkin 8 times to reveal the teachers' checkpoint.</p>
-    <div class="pumpkin" id="pumpkin" role="button" tabindex="0" aria-label="Smash the pumpkin">🎃</div>
-    <div id="hitCount">0 / 8 HITS</div>
-    <div class="track"><div id="pumpkinBar"></div></div>
-    <p id="pumpkinMessage">The pumpkin is laughing at you...</p>
-
-    <div id="finalStage">
-      <div class="clue-box">
-        <div class="clue-title">🕯️ THE FINAL CHALLENGE</div>
-        <p>Go to the <b>Halloween teachers' stand</b> and show them this QR code.</p>
-      </div>
-      <div class="qr-box" id="staffQR">Loading QR...</div>
-      <p>The teachers will ask you the final question. Answer correctly to receive the secret code.</p>
-      <form id="finalForm">
-        <input id="finalCodeInput" autocomplete="off" placeholder="CODE FROM THE TEACHERS" required>
-        <button class="primary" type="submit">CLAIM MY TREASURE 🍬</button>
-      </form>
-      <p id="finalFeedback" aria-live="polite"></p>
+    <div class="card">
+      <span class="bat">🦇</span>
+      <h2>A little warning...</h2>
+      <p>
+        To claim your reward, you must solve riddles,
+        discover hidden codes, and follow mysterious clues.
+        Every answer brings you closer to the prize.
+      </p>
+      <p><b>Think carefully. Explore safely. Trust no ghost.</b></p>
+      <button class="primary" id="startButton" type="button">
+        ENTER IF YOU DARE →
+      </button>
     </div>
-  </div>
-</section>
+    <p class="small">YOUR DESTINY IS SEALED...</p>
+  </section>
 
-<section class="screen" id="winner">
-  <div class="hero">🏆</div>
-  <div class="eyebrow">MISSION ACCOMPLISHED</div>
-  <h1>YOU WON!</h1>
-  <div class="card">
-    <div style="font-size:65px">🍬🍫🍭</div>
-    <h2>Sweet Victory!</h2>
-    <p>Congratulations, brave hunter! You completed every challenge.</p>
-    <h2 style="color:#ff7518">YOU HAVE WON A CANDY PACK!</h2>
-    <p>Show this winner QR code to the teachers to claim your prize.</p>
-    <div class="qr-box" id="winnerQR">Loading QR...</div>
-    <p class="small">HALLOWEEN TREASURE HUNT • WINNER</p>
-    <button id="downloadButton" type="button">SAVE WINNER QR CODE ↓</button>
-  </div>
-</section>
+  <section class="screen" id="quiz">
+    <div class="eyebrow" id="questionNumber">TRIAL 01</div>
+    <h2 id="questionTitle">A Halloween Riddle</h2>
+    <p id="questionText"></p>
+    <div class="options" id="options"></div>
+    <p id="feedback" aria-live="polite"></p>
+  </section>
+
+  <section class="screen" id="clue">
+    <div class="eyebrow">SECRET LOCATION DISCOVERED</div>
+    <div class="clue-icon" id="clueIcon">🌸</div>
+    <h2>Your Next Clue</h2>
+    <p>Search the location below for a hidden secret code.</p>
+
+    <div class="clue-box">
+      <div class="clue-title" id="clueName">Flowers</div>
+      <p id="clueDescription"></p>
+    </div>
+
+    <p class="small">FOUND THE CODE? ENTER IT BELOW.</p>
+    <form id="codeForm">
+      <input id="codeInput" autocomplete="off"
+        placeholder="ENTER SECRET CODE" required>
+      <button class="primary" type="submit">UNLOCK THE NEXT TRIAL →</button>
+    </form>
+    <p id="codeFeedback" aria-live="polite"></p>
+  </section>
+
+  <section class="screen" id="celebration">
+    <div class="eyebrow">ALL TRIALS COMPLETED</div>
+    <h1>You Made It!</h1>
+    <p>But your treasure is still locked. One final challenge awaits...</p>
+
+    <div class="card">
+      <h2>Break the Curse!</h2>
+      <p>Click the pumpkin <b>8 times</b> to shatter its magic.</p>
+
+      <div class="pumpkin" id="pumpkin"
+        role="button" tabindex="0"
+        aria-label="Smash the pumpkin">🎃</div>
+
+      <div id="hitCount">0 / 8 HITS</div>
+
+      <div class="progress-track">
+        <div id="pumpkinBar"
+          style="height:100%;width:0%;background:#ff7518;transition:width .2s"></div>
+      </div>
+
+      <p id="pumpkinMessage">The pumpkin is laughing at you...</p>
+
+      <div id="finalClue">
+        <div class="clue-box">
+          <div class="clue-title">🧙 THE TEACHERS' STAND</div>
+          <p>
+            The curse is broken! Show this QR code to the teachers
+            at the Halloween stand. They will ask you the final
+            question and give you the secret code.
+          </p>
+          <div id="staffQR" aria-label="QR code for the teachers' stand"></div>
+          <p class="small">SHOW THIS QR CODE TO THE TEACHERS</p>
+        </div>
+
+        <form id="finalForm">
+          <input id="finalCodeInput" autocomplete="off"
+            placeholder="ENTER THE CODE FROM THE TEACHERS" required>
+          <button class="primary" type="submit">CLAIM MY TREASURE 🍬</button>
+        </form>
+        <p id="finalFeedback" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="winner">
+    <div class="hero">🏆</div>
+    <div class="eyebrow">MISSION ACCOMPLISHED</div>
+    <h1>YOU WON!</h1>
+    <div class="card">
+      <div style="font-size:65px">🍬🍫🍭</div>
+      <h2>Sweet Victory!</h2>
+      <p>
+        Congratulations, brave hunter!
+        You solved every riddle, discovered every secret,
+        and survived the Halloween challenge.
+      </p>
+      <h2 style="color:#ff7518">YOU HAVE WON A CANDY PACK!</h2>
+      <p>Show this QR code to claim your prize.</p>
+      <div id="qr" aria-label="Winner verification QR code"></div>
+      <p class="small">HALLOWEEN TREASURE HUNT • WINNER VERIFIED</p>
+      <button id="downloadButton" type="button">SAVE WINNER QR CODE ↓</button>
+    </div>
+  </section>
+
 </main>
 
+<button class="music-button" id="musicButton" type="button">
+  🔇 Spooky Music: OFF
+</button>
+
 <footer>MADE FOR A NIGHT OF MYSTERY • 🎃 • HAPPY HALLOWEEN</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <script>
 "use strict";
 
-// SECRET ORGANIZER SETTINGS
-const LOCATION_CODES = ["PUMPKIN13", "GHOST27", "RIDDLE44", "NIGHT81"];
+/*
+  ORGANIZER SETTINGS
+  Change the secret codes here before publishing.
+  Note: codes in a client-side HTML file can be discovered
+  by someone inspecting the source code.
+*/
+
+const LOCATION_CODES = [
+  "PUMPKIN13",
+  "GHOST27",
+  "RIDDLE44",
+  "NIGHT81"
+];
+
 const FINAL_CODE = "SWEET66";
 
 const QUESTIONS = [
   {
-    title:"The Witch's Riddle",
-    text:"What do people traditionally carve into a lantern for Halloween?",
-    answers:["A watermelon","A pumpkin","An apple","A pineapple"],
-    correct:1
+    title: "The Witch's Riddle",
+    text: "What do people traditionally carve into a lantern for Halloween?",
+    answers: ["A watermelon", "A pumpkin", "An apple", "A pineapple"],
+    correct: 1
   },
   {
-    title:"The Ghost's Challenge",
-    text:"Which creature is said to turn into a bat?",
-    answers:["A vampire","A scarecrow","A mummy","A skeleton"],
-    correct:0
+    title: "The Ghost's Challenge",
+    text: "Which creature is said to turn into a bat?",
+    answers: ["A vampire", "A scarecrow", "A mummy", "A skeleton"],
+    correct: 0
   },
   {
-    title:"The Witching Hour",
-    text:"What do witches traditionally ride?",
-    answers:["A broomstick","A bicycle","A skateboard","A train"],
-    correct:0
+    title: "The Witching Hour",
+    text: "What do witches traditionally ride?",
+    answers: ["A broomstick", "A bicycle", "A skateboard", "A train"],
+    correct: 0
   },
   {
-    title:"The Final Trial",
-    text:"What phrase do children say when asking for Halloween candy?",
-    answers:["Happy birthday!","Trick or treat!","Good morning!","See you soon!"],
-    correct:1
+    title: "The Final Trial",
+    text: "What phrase do children say when asking for Halloween candy?",
+    answers: ["Happy birthday!", "Trick or treat!", "Good morning!", "See you soon!"],
+    correct: 1
   }
 ];
 
 const LOCATIONS = [
-  {name:"Flowers",icon:"🌷",description:"Check around the flowers. A hidden code is waiting nearby."},
-  {name:"Benches",icon:"🪑",description:"Search around the benches for the next secret code."},
-  {name:"The Bust of O'Higgins",icon:"🗿",description:"Find the bust of O'Higgins. Search nearby for the hidden code."},
-  {name:"Trees",icon:"🌳",description:"Look carefully around the trees. Your next secret is waiting."}
+  {
+    name: "Flowers",
+    icon: "🌸",
+    description: "Check around the flowers. Your first hidden code is waiting nearby."
+  },
+  {
+    name: "Benches",
+    icon: "🪑",
+    description: "Take a seat... if you dare. Search around the benches for the next code."
+  },
+  {
+    name: "The Bust of O'Higgins",
+    icon: "🗿",
+    description: "Find the bust of O'Higgins. Look nearby for a secret left by the spirits."
+  },
+  {
+    name: "Trees",
+    icon: "🌳",
+    description: "Look carefully around the trees. Nature is hiding your next secret."
+  }
 ];
 
-let questionIndex=0;
-let locationIndex=0;
-let pumpkinHits=0;
-let questionSolved=false;
-let musicOn=false;
-let audioContext=null;
-let masterGain=null;
-let musicNodes=[];
-let bellTimer=null;
-let musicGeneration=0;
+let questionIndex = 0;
+let locationIndex = 0;
+let pumpkinHits = 0;
+let currentQuestionSolved = false;
+let codeLocked = false;
+let finalLocked = false;
 
-function $(id){return document.getElementById(id)}
-
-function showScreen(id,progress,label){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  $(id).classList.add("active");
-  $("progress").textContent=label;
-  $("bar").style.width=progress+"%";
-  window.scrollTo(0,0);
+/* Safe element lookup */
+function byId(id) {
+  return document.getElementById(id);
 }
 
-function startHunt(){
-  questionIndex=0;
-  locationIndex=0;
+function showScreen(id, progress, label) {
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  byId(id).classList.add("active");
+  byId("progress").textContent = label;
+  byId("progressBar").style.width = progress + "%";
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function startHunt() {
+  questionIndex = 0;
+  locationIndex = 0;
+  pumpkinHits = 0;
   showQuestion();
 }
 
-function showQuestion(){
-  questionSolved=false;
-  const q=QUESTIONS[questionIndex];
-  showScreen("quiz",Math.round(questionIndex/QUESTIONS.length*70),
-    "TRIAL "+(questionIndex+1)+" OF "+QUESTIONS.length);
-  $("questionNumber").textContent="TRIAL "+String(questionIndex+1).padStart(2,"0");
-  $("questionTitle").textContent=q.title;
-  $("questionText").textContent=q.text;
-  $("feedback").textContent="";
-  $("feedback").className="";
-  const options=$("options");
+function showQuestion() {
+  if (questionIndex >= QUESTIONS.length) {
+    showCelebration();
+    return;
+  }
+
+  currentQuestionSolved = false;
+  const question = QUESTIONS[questionIndex];
+
+  showScreen(
+    "quiz",
+    Math.round((questionIndex / QUESTIONS.length) * 75),
+    "TRIAL " + (questionIndex + 1) + " OF " + QUESTIONS.length
+  );
+
+  byId("questionNumber").textContent =
+    "TRIAL " + String(questionIndex + 1).padStart(2, "0");
+
+  byId("questionTitle").textContent = question.title;
+  byId("questionText").textContent = question.text;
+  byId("feedback").textContent = "";
+  byId("feedback").className = "";
+
+  const options = byId("options");
   options.replaceChildren();
 
-  q.answers.forEach((answer,index)=>{
-    const button=document.createElement("button");
-    button.type="button";
-    button.className="option";
-    button.textContent=answer;
-    button.addEventListener("click",()=>checkAnswer(index));
+  question.answers.forEach((answer, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "option";
+    button.textContent = answer;
+
+    // Attach the click handler directly to each answer.
+    button.addEventListener("click", () => checkAnswer(index));
+
     options.appendChild(button);
   });
 }
 
-function checkAnswer(index){
-  if(questionSolved)return;
-  const feedback=$("feedback");
-  if(index!==QUESTIONS[questionIndex].correct){
-    feedback.textContent="❌ Wrong answer! Try again...";
-    feedback.className="bad";
+function checkAnswer(index) {
+  if (currentQuestionSolved) return;
+
+  const question = QUESTIONS[questionIndex];
+  const feedback = byId("feedback");
+
+  if (index !== question.correct) {
+    feedback.textContent = "❌ Wrong answer! The spirits say: try again...";
+    feedback.className = "bad";
     return;
   }
-  questionSolved=true;
-  feedback.textContent="✨ CORRECT! A new clue awaits...";
-  feedback.className="good";
-  setTimeout(showClue,650);
+
+  currentQuestionSolved = true;
+  feedback.textContent = "✨ CORRECT! The magic reveals a new clue...";
+  feedback.className = "good";
+
+  byId("options").querySelectorAll("button").forEach(button => {
+    button.disabled = true;
+  });
+
+  window.setTimeout(showClue, 700);
 }
 
-function showClue(){
-  const place=LOCATIONS[locationIndex];
-  showScreen("clue",15+locationIndex*15,"SECRET LOCATION "+(locationIndex+1));
-  $("clueIcon").textContent=place.icon;
-  $("clueName").textContent=place.name;
-  $("clueDescription").textContent=place.description;
-  $("codeInput").value="";
-  $("codeFeedback").textContent="";
-  $("codeFeedback").className="";
+function showClue() {
+  const location = LOCATIONS[locationIndex];
+
+  if (!location) {
+    showCelebration();
+    return;
+  }
+
+  showScreen(
+    "clue",
+    15 + locationIndex * 15,
+    "HIDDEN CODE " + (locationIndex + 1) + " OF " + LOCATIONS.length
+  );
+
+  byId("clueIcon").textContent = location.icon;
+  byId("clueName").textContent = location.name;
+  byId("clueDescription").textContent = location.description;
+  byId("codeInput").value = "";
+  byId("codeFeedback").textContent = "";
+  byId("codeFeedback").className = "";
+  codeLocked = false;
 }
 
-function redeemCode(event){
+function redeemCode(event) {
   event.preventDefault();
-  const entered=$("codeInput").value.trim().toUpperCase();
-  const feedback=$("codeFeedback");
 
-  if(entered!==LOCATION_CODES[locationIndex]){
-    feedback.textContent="🚫 Incorrect code. Keep searching!";
-    feedback.className="bad";
+  if (codeLocked) return;
+
+  const entered = byId("codeInput").value.trim().toUpperCase();
+  const feedback = byId("codeFeedback");
+
+  if (entered !== LOCATION_CODES[locationIndex]) {
+    feedback.textContent = "🚫 Incorrect code! Keep searching.";
+    feedback.className = "bad";
     return;
   }
 
-  feedback.textContent="🔓 CODE ACCEPTED!";
-  feedback.className="good";
+  codeLocked = true;
+  feedback.textContent = "🔓 CODE ACCEPTED!";
+  feedback.className = "good";
+
   locationIndex++;
 
-  setTimeout(()=>{
-    if(locationIndex<LOCATIONS.length){
-      questionIndex++;
+  window.setTimeout(() => {
+    if (locationIndex < LOCATIONS.length) {
+      questionIndex = locationIndex;
       showQuestion();
-    }else{
+    } else {
       showCelebration();
     }
-  },550);
+  }, 650);
 }
 
-function showCelebration(){
-  pumpkinHits=0;
-  $("pumpkin").textContent="🎃";
-  $("pumpkin").style.transform="";
-  $("hitCount").textContent="0 / 8 HITS";
-  $("pumpkinBar").style.width="0%";
-  $("pumpkinMessage").textContent="The pumpkin is laughing at you...";
-  $("finalStage").style.display="none";
-  $("finalCodeInput").value="";
-  $("finalFeedback").textContent="";
-  showScreen("celebration",85,"BREAK THE CURSE");
+function showCelebration() {
+  pumpkinHits = 0;
+  finalLocked = false;
+
+  byId("pumpkin").textContent = "🎃";
+  byId("pumpkin").style.transform = "";
+  byId("pumpkin").style.filter = "";
+  byId("hitCount").textContent = "0 / 8 HITS";
+  byId("pumpkinBar").style.width = "0%";
+  byId("pumpkinMessage").textContent =
+    "The pumpkin is laughing at you...";
+  byId("finalClue").style.display = "none";
+  byId("finalCodeInput").value = "";
+  byId("finalFeedback").textContent = "";
+  byId("finalFeedback").className = "";
+
+  showScreen("celebration", 85, "THE FINAL CHALLENGE");
 }
 
-function smashPumpkin(){
-  if(pumpkinHits>=8)return;
+function smashPumpkin() {
+  if (pumpkinHits >= 8) return;
+
   pumpkinHits++;
-  $("hitCount").textContent=pumpkinHits+" / 8 HITS";
-  $("pumpkinBar").style.width=(pumpkinHits/8*100)+"%";
 
-  if(pumpkinHits<8){
-    $("pumpkin").style.transform="rotate("+(Math.random()*20-10)+"deg) scale(.95)";
-    $("pumpkinMessage").textContent=[
-      "It's cracking!","Keep going!","The curse is weakening!",
-      "Almost there!","The pumpkin is terrified!"
-    ][pumpkinHits%5];
-    return;
+  byId("hitCount").textContent = pumpkinHits + " / 8 HITS";
+  byId("pumpkinBar").style.width = (pumpkinHits / 8 * 100) + "%";
+
+  const pumpkin = byId("pumpkin");
+
+  if (pumpkinHits < 8) {
+    pumpkin.style.transform =
+      "rotate(" + (Math.random() * 24 - 12) + "deg) scale(" +
+      (0.95 + Math.random() * 0.12) + ")";
+
+    const messages = [
+      "It's cracking!",
+      "Keep going!",
+      "The curse is weakening!",
+      "Almost there!",
+      "The pumpkin is terrified!"
+    ];
+
+    byId("pumpkinMessage").textContent =
+      messages[(pumpkinHits - 1) % messages.length];
+  } else {
+    pumpkin.textContent = "💥";
+    pumpkin.style.transform = "scale(1.25)";
+    pumpkin.style.filter = "drop-shadow(0 0 30px #ff7518)";
+
+    byId("pumpkinMessage").textContent =
+      "🎉 BOOM! The pumpkin's curse is broken!";
+
+    byId("finalClue").style.display = "block";
+    byId("progress").textContent = "VISIT THE TEACHERS' STAND";
+    byId("progressBar").style.width = "95%";
+
+    createQR(
+      "staffQR",
+      "HALLOWEEN TREASURE HUNT\n" +
+      "TEACHERS' STAND\n" +
+      "Ask the player the final question.\n" +
+      "Give the player the final secret code if correct."
+    );
   }
-
-  $("pumpkin").textContent="💥";
-  $("pumpkin").style.transform="scale(1.2)";
-  $("pumpkinMessage").textContent="🎉 BOOM! The curse is broken!";
-  $("finalStage").style.display="block";
-  $("progress").textContent="VISIT THE TEACHERS' STAND";
-  $("bar").style.width="95%";
-
-  makeQR("staffQR",
-    "HALLOWEEN TREASURE HUNT\nOFFICIAL STAFF CHECKPOINT\nAsk the participant the final question. If correct, give them the secret redemption code.");
 }
 
-function redeemFinal(event){
+function redeemFinal(event) {
   event.preventDefault();
-  const entered=$("finalCodeInput").value.trim().toUpperCase();
-  const feedback=$("finalFeedback");
 
-  if(pumpkinHits<8){
-    feedback.textContent="Break the pumpkin first!";
-    feedback.className="bad";
+  if (finalLocked) return;
+
+  const entered = byId("finalCodeInput").value.trim().toUpperCase();
+  const feedback = byId("finalFeedback");
+
+  if (pumpkinHits < 8) {
+    feedback.textContent = "Break the pumpkin first!";
+    feedback.className = "bad";
     return;
   }
 
-  if(entered!==FINAL_CODE){
-    feedback.textContent="❌ Incorrect code. Check with the teachers and try again.";
-    feedback.className="bad";
+  if (entered !== FINAL_CODE) {
+    feedback.textContent = "❌ Incorrect code! Ask the teachers again if needed.";
+    feedback.className = "bad";
     return;
   }
 
+  finalLocked = true;
   showWinner();
 }
 
-function showWinner(){
-  showScreen("winner",100,"TREASURE CLAIMED!");
-  makeQR("winnerQR",
-    "HALLOWEEN TREASURE HUNT\nWINNER\nPRIZE: ONE CANDY PACK\nThe participant completed the Halloween hunt.");
-}
-
-function makeQR(id,message){
-  const container=$(id);
+function createQR(elementId, message) {
+  const container = byId(elementId);
   container.replaceChildren();
 
-  if(typeof window.QRCode==="undefined"){
-    container.textContent="QR library unavailable. Connect to the internet and reload.";
+  if (typeof QRCode === "undefined") {
+    container.textContent =
+      "QR generator unavailable. Please connect to the internet and reload.";
     return;
   }
 
-  new window.QRCode(container,{
-    text:message,
-    width:200,
-    height:200,
-    colorDark:"#180f20",
-    colorLight:"#ffffff",
-    correctLevel:window.QRCode.CorrectLevel.M
-  });
+  try {
+    new QRCode(container, {
+      text: message,
+      width: 200,
+      height: 200,
+      colorDark: "#180f20",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } catch (error) {
+    console.error("Could not generate QR code:", error);
+    container.textContent = "Could not create QR code. Please reload the page.";
+  }
 }
 
-function downloadQR(){
-  const container=$("winnerQR");
-  const canvas=container.querySelector("canvas");
-  const img=container.querySelector("img");
-  const url=canvas?canvas.toDataURL("image/png"):(img?img.src:"");
+function showWinner() {
+  showScreen("winner", 100, "TREASURE CLAIMED!");
 
-  if(!url){
-    alert("The QR code is not ready. Please try again.");
+  createQR(
+    "qr",
+    "HALLOWEEN TREASURE HUNT\n" +
+    "WINNER VERIFIED\n" +
+    "PRIZE: ONE CANDY PACK\n" +
+    "Congratulations! You completed the hunt."
+  );
+}
+
+function downloadQR() {
+  const qr = byId("qr");
+  const canvas = qr.querySelector("canvas");
+  const img = qr.querySelector("img");
+
+  let url = "";
+
+  if (canvas) {
+    url = canvas.toDataURL("image/png");
+  } else if (img) {
+    url = img.src;
+  }
+
+  if (!url) {
+    alert("The QR code is not ready yet. Please try again.");
     return;
   }
 
-  const a=document.createElement("a");
-  a.href=url;
-  a.download="halloween-winner.png";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "halloween-winner.png";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
 }
 
-// SPOOKY SYNTHESIZED AMBIENCE
-// Start only after the user presses the sound button.
+/* SPOOKY MUSIC: generated in the browser, no music file needed. */
+let audioContext = null;
+let musicTimer = null;
+let musicEnabled = false;
+let musicStep = 0;
+let musicNodes = [];
 
-function addTone(freq,type,volume,detune=0){
-  const osc=audioContext.createOscillator();
-  const gain=audioContext.createGain();
-  const filter=audioContext.createBiquadFilter();
+function playSpookyNote() {
+  if (!audioContext || !musicEnabled) return;
 
-  osc.type=type;
-  osc.frequency.value=freq;
-  osc.detune.value=detune;
-  filter.type="lowpass";
-  filter.frequency.value=700;
-  gain.gain.value=volume;
+  const notes = [55, 65.41, 73.42, 65.41, 49, 58.27, 73.42, 58.27];
+  const frequency = notes[musicStep % notes.length];
+  musicStep++;
 
-  osc.connect(filter);
-  filter.connect(gain);
-  gain.connect(masterGain);
-  osc.start();
+  try {
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
 
-  musicNodes.push(osc);
-  return {osc,gain};
+    oscillator.type = "triangle";
+    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+
+    gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(
+      0.045, audioContext.currentTime + 0.12
+    );
+    gain.gain.exponentialRampToValueAtTime(
+      0.0001, audioContext.currentTime + 1.5
+    );
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 1.6);
+
+    musicNodes.push(oscillator);
+    oscillator.onended = () => {
+      musicNodes = musicNodes.filter(node => node !== oscillator);
+      oscillator.disconnect();
+      gain.disconnect();
+    };
+  } catch (error) {
+    console.warn("Audio playback error:", error);
+  }
 }
 
-async function startMusic(){
-  if(musicOn)return;
+async function toggleMusic() {
+  const button = byId("musicButton");
 
-  const AudioCtx=window.AudioContext||window.webkitAudioContext;
-  if(!AudioCtx){
-    alert("Audio is not supported by this browser.");
+  if (musicEnabled) {
+    musicEnabled = false;
+
+    if (musicTimer !== null) {
+      clearInterval(musicTimer);
+      musicTimer = null;
+    }
+
+    if (audioContext) {
+      try {
+        await audioContext.suspend();
+      } catch (error) {
+        console.warn(error);
+      }
+    }
+
+    button.textContent = "🔇 Spooky Music: OFF";
     return;
   }
 
-  try{
-    if(!audioContext)audioContext=new AudioCtx();
+  try {
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContextClass) {
+      button.textContent = "⚠️ Audio not supported";
+      return;
+    }
+
+    if (!audioContext) audioContext = new AudioContextClass();
+
     await audioContext.resume();
+    musicEnabled = true;
+    musicStep = 0;
 
-    masterGain=audioContext.createGain();
-    masterGain.gain.value=0;
-    masterGain.connect(audioContext.destination);
+    playSpookyNote();
+    musicTimer = setInterval(playSpookyNote, 700);
 
-    const now=audioContext.currentTime;
-    masterGain.gain.setValueAtTime(0,now);
-    masterGain.gain.linearRampToValueAtTime(.18,now+2);
-
-    addTone(55,"sine",.35);
-    addTone(82.4,"triangle",.10,-7);
-    addTone(110,"sine",.07,5);
-
-    const ghost1=addTone(220,"sine",.02);
-    const ghost2=addTone(233,"sine",.015);
-    ghost1.gain.gain.value=.018;
-    ghost2.gain.gain.value=.012;
-
-    musicOn=true;
-    const generation=++musicGeneration;
-    $("musicButton").textContent="🔊 SOUND ON";
-
-    const notes=[392,440,523.25,466.16,349.23,440];
-    let i=0;
-
-    bellTimer=setInterval(()=>{
-      if(!musicOn||generation!==musicGeneration||!audioContext||!masterGain)return;
-
-      const t=audioContext.currentTime;
-      const osc=audioContext.createOscillator();
-      const gain=audioContext.createGain();
-
-      osc.type="sine";
-      osc.frequency.value=notes[i++%notes.length];
-      gain.gain.setValueAtTime(.0001,t);
-      gain.gain.exponentialRampToValueAtTime(.022,t+.1);
-      gain.gain.exponentialRampToValueAtTime(.0001,t+2.5);
-      osc.connect(gain);
-      gain.connect(masterGain);
-      osc.start(t);
-      osc.stop(t+2.6);
-    },3000);
-  }catch(error){
-    musicOn=false;
-    $("musicButton").textContent="🔇 SOUND OFF";
-    alert("Could not start audio. Please tap Sound Off and try again.");
+    button.textContent = "🔊 Spooky Music: ON";
+  } catch (error) {
+    console.error("Could not start spooky music:", error);
+    button.textContent = "⚠️ Tap to retry music";
   }
 }
 
-function stopMusic(){
-  if(!musicOn)return;
-  musicOn=false;
-  musicGeneration++;
+/*
+  Register all events after the HTML is loaded.
+  No inline onclick or onsubmit attributes are needed.
+*/
+document.addEventListener("DOMContentLoaded", () => {
+  byId("startButton").addEventListener("click", startHunt);
+  byId("codeForm").addEventListener("submit", redeemCode);
+  byId("finalForm").addEventListener("submit", redeemFinal);
+  byId("downloadButton").addEventListener("click", downloadQR);
+  byId("musicButton").addEventListener("click", toggleMusic);
 
-  if(bellTimer!==null){
-    clearInterval(bellTimer);
-    bellTimer=null;
-  }
+  byId("pumpkin").addEventListener("click", smashPumpkin);
 
-  if(masterGain&&audioContext){
-    const oldGain=masterGain;
-    const now=audioContext.currentTime;
-    oldGain.gain.cancelScheduledValues(now);
-    oldGain.gain.setTargetAtTime(0,now,.12);
-
-    const oldNodes=musicNodes.slice();
-    musicNodes=[];
-    masterGain=null;
-
-    setTimeout(()=>{
-      oldNodes.forEach(node=>{
-        try{node.stop()}catch(e){}
-        try{node.disconnect()}catch(e){}
-      });
-      try{oldGain.disconnect()}catch(e){}
-    },700);
-  }
-
-  $("musicButton").textContent="🔇 SOUND OFF";
-}
-
-function toggleMusic(){
-  if(musicOn)stopMusic();
-  else startMusic();
-}
-
-// All controls are explicitly connected after the page loads.
-function initialise(){
-  $("startButton").addEventListener("click",startHunt);
-  $("codeForm").addEventListener("submit",redeemCode);
-  $("finalForm").addEventListener("submit",redeemFinal);
-  $("pumpkin").addEventListener("click",smashPumpkin);
-  $("pumpkin").addEventListener("keydown",event=>{
-    if(event.key==="Enter"||event.key===" "){
+  byId("pumpkin").addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       smashPumpkin();
     }
   });
-  $("musicButton").addEventListener("click",toggleMusic);
-  $("downloadButton").addEventListener("click",downloadQR);
-}
-
-if(document.readyState==="loading"){
-  document.addEventListener("DOMContentLoaded",initialise);
-}else{
-  initialise();
-}
+});
 </script>
 
-<!-- QR generator. If blocked, the game still works, but QR codes need this library. -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 </body>
-  </html>
+</html>
