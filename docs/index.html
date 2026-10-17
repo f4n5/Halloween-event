@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,151 +5,427 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Halloween Treasure Hunt 🎃</title>
 <style>
-:root{--orange:#ff7518;--gold:#ffb347;--bg:#09070d;--muted:#aaa2b6}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;color:white;background:radial-gradient(ellipse at 50% 0%,#35152a,transparent 55%),radial-gradient(ellipse at 90% 90%,#25112e,transparent 45%),var(--bg);font-family:system-ui,Arial,sans-serif;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.13;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:36px 36px}
-button,input{font:inherit}button{cursor:pointer}
-button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
-.topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 5%;border-bottom:1px solid #ffffff17;background:#09070dcc}
-.brand{color:var(--orange);font-weight:900;letter-spacing:2px;font-size:19px}
-.audio-controls{display:flex;gap:8px;flex-wrap:wrap}
-.small-btn{color:white;background:#211927;border:1px solid #55405c;padding:9px 12px;border-radius:8px}
-.small-btn:hover{border-color:var(--orange)}
-main{width:min(680px,92%);margin:36px auto 70px;position:relative;z-index:1}
-.hero{text-align:center;margin-bottom:25px}
-.pumpkin{font-size:clamp(65px,16vw,100px);display:inline-block;filter:drop-shadow(0 0 22px #ff751855);animation:float 3s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-9px) rotate(3deg)}}
-h1{font-size:clamp(30px,7vw,48px);line-height:1.05;margin:10px 0;letter-spacing:-1px}
-h1 span{color:var(--orange)}
-.subtitle{color:var(--muted);line-height:1.6}
-.panel{background:linear-gradient(145deg,#19131f,#100d16);border:1px solid #ffffff19;border-radius:16px;padding:clamp(18px,5vw,30px);box-shadow:0 20px 70px #0008}
-.hidden{display:none!important}
-.eyebrow{color:var(--orange);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
-h2{margin:9px 0 12px;font-size:25px}
-p{line-height:1.65}
-.muted{color:var(--muted)}
-.primary{display:block;width:100%;margin-top:18px;padding:14px 18px;border:0;border-radius:9px;color:#160b06;font-weight:900;background:linear-gradient(110deg,#ff7518,#ffc04b);box-shadow:0 5px 25px #ff75182b;transition:transform .15s,filter .15s}
-.primary:hover{transform:translateY(-2px);filter:brightness(1.1)}
-.field{display:block;width:100%;margin-top:15px;padding:14px;border:1px solid #4c3c53;border-radius:9px;color:white;background:#0c0911}
-.field::placeholder{color:#83768d}
-.feedback{margin-top:13px;padding:12px;border-radius:8px;background:#ffffff09;min-height:20px;font-size:14px}
-.feedback.good{color:#75ffac}.feedback.bad{color:#ff7777}
-.progress-area{margin-bottom:20px}
-.progress-label{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-bottom:8px}
-.progress-track{height:6px;background:#302538;border-radius:20px;overflow:hidden}
-.progress-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--orange),var(--gold));transition:width .4s}
-.clue-number{display:inline-block;border:1px solid #784322;color:var(--gold);background:#ff751812;border-radius:6px;padding:5px 9px;font-size:12px;font-weight:bold}
-.riddle{font-size:18px;line-height:1.7;margin:20px 0}
-.answers{display:grid;gap:10px;margin-top:15px}
-.answer-option{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px;border:1px solid #49364f;border-radius:10px;color:white;background:#17111e;transition:border-color .15s,background .15s}
-.answer-option:hover{border-color:var(--orange);background:#241725}
-.answer-option.selected{border-color:var(--orange);background:#ff75181c;box-shadow:inset 0 0 0 1px #ff751855}
-.answer-option:disabled{cursor:default;opacity:.8}
-.letter{display:grid;place-items:center;flex-shrink:0;width:30px;height:30px;border-radius:7px;background:#302438;color:var(--gold);font-weight:900}
-.answer-option.selected .letter{background:var(--orange);color:#1b0b02}
-.pumpkin-game{text-align:center}
-.pumpkin-hit{font-size:80px;background:transparent;border:0;filter:drop-shadow(0 0 15px #ff751833);transition:transform .08s}
-.pumpkin-hit:active{transform:scale(.85) rotate(-8deg)}
-.hit-counter{color:var(--gold);font-size:25px;font-weight:900}
-.qr{display:block;width:min(230px,100%);aspect-ratio:1;object-fit:contain;margin:20px auto;background:white;border-radius:12px;padding:10px}
-.final-card{text-align:center}.final-emoji{font-size:70px}
-.footer{text-align:center;padding:25px 10px;color:#7d7286;font-size:12px}
-#toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;z-index:10;background:#251b2c;border:1px solid #684b72;padding:12px 18px;border-radius:10px;pointer-events:none;transition:.25s;text-align:center;width:max-content;max-width:90%}
-#toast.show{opacity:1;transform:translate(-50%,0)}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
-.shake{animation:shake .25s}
-@media(max-width:480px){.topbar{align-items:flex-start}.audio-controls{justify-content:flex-end}main{margin-top:24px}}
+:root {
+  --orange: #ff7518;
+  --gold: #ffb347;
+  --bg: #09070d;
+  --muted: #aaa2b6;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  color: white;
+  background:
+    radial-gradient(ellipse at 50% 0%, #35152a 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 90%, #25112e 0%, transparent 45%),
+    var(--bg);
+  font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: radial-gradient(#fff 1px, transparent 1px);
+  background-size: 36px 36px;
+  z-index: 0;
+}
+button, input { font: inherit; }
+button { cursor: pointer; border: none; }
+button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+.topbar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 5%;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(9,7,13,0.85);
+  backdrop-filter: blur(8px);
+}
+.brand {
+  color: var(--orange);
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  font-size: 18px;
+}
+.audio-controls { display: flex; gap: 8px; flex-wrap: wrap; }
+.small-btn {
+  color: white;
+  background: #211927;
+  border: 1px solid #55405c;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.small-btn:hover { border-color: var(--orange); background: #2a1f30; }
+main {
+  width: min(640px, 92%);
+  margin: 28px auto 60px;
+  position: relative;
+  z-index: 1;
+}
+.hero { text-align: center; margin-bottom: 22px; }
+.pumpkin {
+  font-size: clamp(70px, 18vw, 110px);
+  display: inline-block;
+  filter: drop-shadow(0 0 28px rgba(255,117,24,0.45));
+  animation: float 3.2s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-10px) rotate(3deg); }
+}
+h1 {
+  font-size: clamp(28px, 7vw, 46px);
+  line-height: 1.05;
+  margin: 8px 0 6px;
+  letter-spacing: -1px;
+  font-weight: 800;
+}
+h1 span { color: var(--orange); }
+.subtitle {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+.progress-area { margin-bottom: 18px; }
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 7px;
+  letter-spacing: 0.5px;
+}
+.progress-track {
+  height: 7px;
+  background: #2a1f30;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--orange), var(--gold));
+  transition: width 0.45s ease;
+  border-radius: 20px;
+}
+.panel {
+  background: linear-gradient(160deg, #1a1422, #100d16);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 18px;
+  padding: clamp(20px, 5vw, 32px);
+  box-shadow: 0 22px 60px rgba(0,0,0,0.45);
+}
+.hidden { display: none !important; }
+.eyebrow {
+  color: var(--orange);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+h2 {
+  margin: 6px 0 14px;
+  font-size: 24px;
+  font-weight: 700;
+}
+p { line-height: 1.65; margin-bottom: 10px; }
+.muted { color: var(--muted); font-size: 14.5px; }
+.primary {
+  display: block;
+  width: 100%;
+  margin-top: 18px;
+  padding: 15px 18px;
+  border-radius: 10px;
+  color: #160b06;
+  font-weight: 800;
+  font-size: 15px;
+  background: linear-gradient(110deg, #ff7518, #ffc04b);
+  box-shadow: 0 6px 22px rgba(255,117,24,0.28);
+  transition: transform 0.15s, filter 0.15s;
+}
+.primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+.primary:disabled {
+  opacity: 0.7;
+  cursor: default;
+  transform: none;
+}
+.field {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px 16px;
+  border: 1px solid #4c3c53;
+  border-radius: 10px;
+  color: white;
+  background: #0c0911;
+  font-size: 15px;
+  transition: border-color 0.2s;
+}
+.field:focus { border-color: var(--orange); }
+.field::placeholder { color: #7a6d85; }
+.feedback {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 9px;
+  background: rgba(255,255,255,0.04);
+  min-height: 22px;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+.feedback.good { color: #75ffac; }
+.feedback.bad { color: #ff7777; }
+.clue-number {
+  display: inline-block;
+  border: 1px solid #784322;
+  color: var(--gold);
+  background: rgba(255,117,24,0.1);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+.riddle {
+  font-size: 17px;
+  line-height: 1.7;
+  margin: 16px 0 18px;
+  color: #f0eaf5;
+}
+.answers {
+  display: grid;
+  gap: 10px;
+  margin-top: 6px;
+}
+.answer-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  border: 1.5px solid #49364f;
+  border-radius: 12px;
+  color: white;
+  background: #17111e;
+  transition: border-color 0.18s, background 0.18s, transform 0.12s;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.answer-option:hover:not(:disabled) {
+  border-color: var(--orange);
+  background: #241725;
+  transform: translateX(3px);
+}
+.answer-option.selected {
+  border-color: var(--orange);
+  background: rgba(255,117,24,0.15);
+  box-shadow: inset 0 0 0 1px rgba(255,117,24,0.4);
+}
+.answer-option:disabled { cursor: default; opacity: 0.85; }
+.letter {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #302438;
+  color: var(--gold);
+  font-weight: 900;
+  font-size: 15px;
+  transition: background 0.18s, color 0.18s;
+}
+.answer-option.selected .letter {
+  background: var(--orange);
+  color: #1b0b02;
+}
+.pumpkin-game { text-align: center; margin: 18px 0; }
+.pumpkin-hit {
+  font-size: 90px;
+  background: transparent;
+  border: 0;
+  filter: drop-shadow(0 0 18px rgba(255,117,24,0.35));
+  transition: transform 0.08s;
+  line-height: 1;
+  padding: 10px;
+}
+.pumpkin-hit:active { transform: scale(0.88) rotate(-6deg); }
+.hit-counter {
+  color: var(--gold);
+  font-size: 26px;
+  font-weight: 900;
+  margin-top: 8px;
+}
+.qr {
+  display: block;
+  width: min(220px, 85%);
+  aspect-ratio: 1;
+  object-fit: contain;
+  margin: 18px auto;
+  background: white;
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+.final-card { text-align: center; }
+.final-emoji { font-size: 72px; margin-bottom: 8px; }
+.footer {
+  text-align: center;
+  padding: 22px 10px 30px;
+  color: #7d7286;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+#toast {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  z-index: 50;
+  background: #251b2c;
+  border: 1px solid #684b72;
+  padding: 13px 20px;
+  border-radius: 11px;
+  pointer-events: none;
+  transition: 0.28s ease;
+  text-align: center;
+  width: max-content;
+  max-width: 90%;
+  font-size: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+#toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+.shake { animation: shake 0.28s; }
+@media (max-width: 480px) {
+  .topbar { align-items: flex-start; padding: 12px 4%; }
+  .audio-controls { justify-content: flex-end; }
+  main { margin-top: 20px; }
+  .answer-option { padding: 13px 14px; gap: 12px; }
+  .letter { width: 28px; height: 28px; font-size: 14px; }
+}
 </style>
 </head>
 <body>
 <header class="topbar">
   <div class="brand">HALLOWEEN</div>
   <div class="audio-controls">
-    <button class="small-btn" id="musicBtn">♫ Start music</button>
+    <button class="small-btn" id="musicBtn">♫ Music</button>
     <button class="small-btn" id="soundBtn">🔊 Sound ON</button>
   </div>
 </header>
 
 <main>
-<section class="hero">
-  <div class="pumpkin">🎃</div>
-  <h1>HALLOWEEN<br><span>TREASURE HUNT</span></h1>
-  <p class="subtitle">Four Halloween questions. Secret codes. One final treasure.<br>Do you dare to begin?</p>
-</section>
+  <section class="hero">
+    <div class="pumpkin">🎃</div>
+    <h1>HALLOWEEN<br><span>TREASURE HUNT</span></h1>
+    <p class="subtitle">Four Halloween questions. Secret codes.<br>One final treasure. Do you dare to begin?</p>
+  </section>
 
-<div class="progress-area">
-  <div class="progress-label"><span id="progressText">YOUR PROGRESS</span><span id="progressCount">0 / 4 questions</span></div>
-  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-</div>
-
-<section class="panel" id="intro">
-  <div class="eyebrow">⚠️ The hunt begins</div>
-  <h2>Welcome, brave explorer.</h2>
-  <p>Answer four Halloween questions, find the secret codes, and survive the cursed pumpkin challenge.</p>
-  <p class="muted">Each question has four possible answers. Choose wisely: only one is correct!</p>
-  <button class="primary" id="startBtn">ENTER THE DARKNESS →</button>
-</section>
-
-<section class="panel hidden" id="cluePanel">
-  <div class="eyebrow" id="clueEyebrow">HALLOWEEN QUIZ</div>
-  <h2 id="clueTitle">Question 1</h2>
-  <span class="clue-number" id="clueBadge">QUESTION 1 OF 4</span>
-  <p class="riddle" id="riddleText"></p>
-  <div class="answers" id="answers"></div>
-  <button class="primary" id="answerBtn">CONFIRM ANSWER</button>
-  <div class="feedback" id="answerFeedback" aria-live="polite">Select one answer to continue.</div>
-
-  <div class="hidden" id="codeArea">
-    <p id="locationMessage"></p>
-    <label for="codeInput" class="muted">Enter the secret code hidden at the location:</label>
-    <input class="field" id="codeInput" autocomplete="off" placeholder="Secret code...">
-    <button class="primary" id="codeBtn">UNLOCK NEXT QUESTION</button>
-    <div class="feedback" id="codeFeedback" aria-live="polite"></div>
+  <div class="progress-area">
+    <div class="progress-label">
+      <span id="progressText">YOUR PROGRESS</span>
+      <span id="progressCount">0 / 4 questions</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
   </div>
-</section>
 
-<section class="panel hidden" id="pumpkinPanel">
-  <div class="eyebrow">BONUS CHALLENGE</div>
-  <h2>The cursed pumpkin</h2>
-  <p class="muted">Something is trapped inside. Click the pumpkin <strong>8 times</strong> to break the curse.</p>
-  <div class="pumpkin-game">
-    <button class="pumpkin-hit" id="pumpkinHit" aria-label="Hit the pumpkin">🎃</button>
-    <div class="hit-counter"><span id="hitCount">0</span> / 8</div>
-    <div class="progress-track" style="margin-top:12px"><div class="progress-fill" id="hitFill"></div></div>
-  </div>
-  <div class="feedback" id="pumpkinFeedback" aria-live="polite">Don't stop now...</div>
-  <div class="hidden" id="pumpkinCodeArea">
-    <p>The curse is broken! A final code has appeared.</p>
-    <p class="eyebrow">YOUR PUMPKIN CODE: <strong id="pumpkinCodeDisplay"></strong></p>
-    <label for="pumpkinCodeInput" class="muted">Enter the code to continue:</label>
-    <input class="field" id="pumpkinCodeInput" autocomplete="off" placeholder="Enter the code...">
-    <button class="primary" id="pumpkinCodeBtn">REVEAL THE NEXT STEP</button>
-    <div class="feedback" id="pumpkinCodeFeedback" aria-live="polite"></div>
-  </div>
-</section>
+  <section class="panel" id="intro">
+    <div class="eyebrow">⚠️ The hunt begins</div>
+    <h2>Welcome, brave explorer.</h2>
+    <p>Answer four Halloween questions, find the secret codes, and survive the cursed pumpkin challenge.</p>
+    <p class="muted">Each question has four options. Only one is correct. Choose wisely.</p>
+    <button class="primary" id="startBtn">ENTER THE DARKNESS →</button>
+  </section>
 
-<section class="panel hidden" id="teacherPanel">
-  <div class="eyebrow">FINAL CHECKPOINT</div>
-  <h2>Find the teachers' stand</h2>
-  <p>Show this QR code to the teachers at their stand. They will ask you the final question and give you a secret code.</p>
-  <img class="qr" id="teacherQR" alt="QR code for the teachers' checkpoint">
-  <p class="muted" style="text-align:center">Answer the teacher's question to earn the final code.</p>
-  <label for="teacherCodeInput" class="muted">Enter the code given by the teachers:</label>
-  <input class="field" id="teacherCodeInput" autocomplete="off" placeholder="Teachers' secret code...">
-  <button class="primary" id="teacherCodeBtn">UNLOCK THE TREASURE</button>
-  <div class="feedback" id="teacherFeedback" aria-live="polite"></div>
-</section>
+  <section class="panel hidden" id="cluePanel">
+    <div class="eyebrow" id="clueEyebrow">HALLOWEEN QUIZ</div>
+    <h2 id="clueTitle">Question 1</h2>
+    <span class="clue-number" id="clueBadge">QUESTION 1 OF 4</span>
+    <p class="riddle" id="riddleText"></p>
+    <div class="answers" id="answers"></div>
+    <button class="primary" id="answerBtn">CONFIRM ANSWER</button>
+    <div class="feedback" id="answerFeedback" aria-live="polite">Select one option to continue.</div>
 
-<section class="panel hidden final-card" id="winnerPanel">
-  <div class="final-emoji">🏆🎃</div>
-  <div class="eyebrow">YOU DID IT</div>
-  <h2>THE TREASURE IS YOURS!</h2>
-  <p>You solved the Halloween quiz, broke the curse, and survived the hunt.</p>
-  <p><strong>Show this final QR code to claim your prize!</strong></p>
-  <img class="qr" id="winnerQR" alt="Winner QR code">
-  <p class="muted">Happy Halloween, brave explorer. 👻</p>
-</section>
+    <div class="hidden" id="codeArea">
+      <p id="locationMessage" style="margin-top:18px;"></p>
+      <label for="codeInput" class="muted">Enter the secret code hidden at the location:</label>
+      <input class="field" id="codeInput" autocomplete="off" placeholder="Secret code...">
+      <button class="primary" id="codeBtn">UNLOCK NEXT QUESTION</button>
+      <div class="feedback" id="codeFeedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="panel hidden" id="pumpkinPanel">
+    <div class="eyebrow">BONUS CHALLENGE</div>
+    <h2>The cursed pumpkin</h2>
+    <p class="muted">Something is trapped inside. Click the pumpkin <strong>8 times</strong> to break the curse.</p>
+    <div class="pumpkin-game">
+      <button class="pumpkin-hit" id="pumpkinHit" aria-label="Hit the pumpkin">🎃</button>
+      <div class="hit-counter"><span id="hitCount">0</span> / 8</div>
+      <div class="progress-track" style="margin-top:14px; max-width:220px; margin-left:auto; margin-right:auto;">
+        <div class="progress-fill" id="hitFill"></div>
+      </div>
+    </div>
+    <div class="feedback" id="pumpkinFeedback" aria-live="polite">Don't stop now...</div>
+    <div class="hidden" id="pumpkinCodeArea">
+      <p>The curse is broken! A final code has appeared.</p>
+      <p class="eyebrow" style="margin:12px 0;">YOUR PUMPKIN CODE: <strong id="pumpkinCodeDisplay" style="color:var(--gold); letter-spacing:2px;"></strong></p>
+      <label for="pumpkinCodeInput" class="muted">Enter the code to continue:</label>
+      <input class="field" id="pumpkinCodeInput" autocomplete="off" placeholder="Enter the code...">
+      <button class="primary" id="pumpkinCodeBtn">REVEAL THE NEXT STEP</button>
+      <div class="feedback" id="pumpkinCodeFeedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="panel hidden" id="teacherPanel">
+    <div class="eyebrow">FINAL CHECKPOINT</div>
+    <h2>Find the teachers' stand</h2>
+    <p>Show this QR code to the teachers at their stand. They will ask you the final question and give you a secret code.</p>
+    <img class="qr" id="teacherQR" alt="QR code for the teachers' checkpoint">
+    <p class="muted" style="text-align:center; margin-bottom:16px;">Answer the teacher's question to earn the final code.</p>
+    <label for="teacherCodeInput" class="muted">Enter the code given by the teachers:</label>
+    <input class="field" id="teacherCodeInput" autocomplete="off" placeholder="Teachers' secret code...">
+    <button class="primary" id="teacherCodeBtn">UNLOCK THE TREASURE</button>
+    <div class="feedback" id="teacherFeedback" aria-live="polite"></div>
+  </section>
+
+  <section class="panel hidden final-card" id="winnerPanel">
+    <div class="final-emoji">🏆🎃</div>
+    <div class="eyebrow">YOU DID IT</div>
+    <h2>THE TREASURE IS YOURS!</h2>
+    <p>You solved the Halloween quiz, broke the curse, and survived the hunt.</p>
+    <p><strong>Show this final QR code to claim your prize.</strong></p>
+    <img class="qr" id="winnerQR" alt="Winner QR code">
+    <p class="muted" style="margin-top:16px;">Happy Halloween, brave explorer. 👻</p>
+  </section>
 </main>
 
 <div class="footer">HAPPY HALLOWEEN • GOOD LUCK 👻</div>
@@ -160,272 +435,390 @@ p{line-height:1.65}
 document.addEventListener("DOMContentLoaded", () => {
   const clues = [
     {
-      title:"The Origins of Halloween",
-      riddle:"The ancient Celtic festival of Samhain influenced Halloween. What did people traditionally believe happened during this festival?",
-      answers:[
+      title: "The Origins of Halloween",
+      riddle: "The ancient Celtic festival of Samhain influenced Halloween. What did people traditionally believe happened during this festival?",
+      answers: [
         "The boundary between the living and the dead became blurred.",
         "The Roman Empire officially began its new year.",
         "People celebrated the first day of spring.",
         "The ancient Greeks honoured the god of the sea."
       ],
-      correct:0,
-      location:"Find the first secret code at the flowers.",
-      code:"PETALS"
+      correct: 0,
+      location: "Find the first secret code at the flowers.",
+      code: "PETALS"
     },
     {
-      title:"Trick or Treat?",
-      riddle:"Why did people in some old Halloween traditions wear costumes or disguises?",
-      answers:[
+      title: "Trick or Treat?",
+      riddle: "Why did people in some old Halloween traditions wear costumes or disguises?",
+      answers: [
         "To look like famous kings and queens.",
         "To hide from or confuse wandering spirits.",
         "To show which village they came from.",
         "To celebrate the end of the school year."
       ],
-      correct:1,
-      location:"Find the second secret code at the benches.",
-      code:"WOOD"
+      correct: 1,
+      location: "Find the second secret code at the benches.",
+      code: "WOOD"
     },
     {
-      title:"The Jack-o'-Lantern",
-      riddle:"In the Irish legend of Stingy Jack, which vegetable was originally carved before pumpkins became popular in America?",
-      answers:[
+      title: "The Jack-o'-Lantern",
+      riddle: "In the Irish legend of Stingy Jack, which vegetable was originally carved before pumpkins became popular in America?",
+      answers: [
         "A potato",
         "A cabbage",
         "A turnip",
         "A carrot"
       ],
-      correct:2,
-      location:"Find the third secret code near the bust of O’Higgins.",
-      code:"LIBERTY"
+      correct: 2,
+      location: "Find the third secret code near the bust of O'Higgins.",
+      code: "LIBERTY"
     },
     {
-      title:"Halloween Symbols",
-      riddle:"Which of these animals became strongly associated with Halloween partly because it is nocturnal and was often seen near fires that attracted insects?",
-      answers:[
+      title: "Halloween Symbols",
+      riddle: "Which of these animals became strongly associated with Halloween partly because it is nocturnal and was often seen near fires that attracted insects?",
+      answers: [
         "The rabbit",
         "The bat",
         "The squirrel",
         "The swan"
       ],
-      correct:1,
-      location:"Find the fourth secret code around the trees.",
-      code:"ROOTS"
+      correct: 1,
+      location: "Find the fourth secret code around the trees.",
+      code: "ROOTS"
     }
   ];
 
-  const pumpkinCode="NIGHT8";
-  const teachersCode="SPOOKY";
-  const $=id=>document.getElementById(id);
-  const sections=["intro","cluePanel","pumpkinPanel","teacherPanel","winnerPanel"];
-  let currentClue=0,pumpkinHits=0,musicOn=false,soundOn=true;
-  let audioCtx=null,musicTimer=null,noteIndex=0,toastTimer=null,explosionPlayed=false;
-  let selectedAnswer=null,answerLocked=false;
+  const pumpkinCode = "NIGHT8";
+  const teachersCode = "SPOOKY";
 
-  const normalize=s=>s.trim().toLowerCase().normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"").replace(/[’]/g,"'").replace(/\s+/g," ")
-    .replace(/[.!?]+$/g,"");
+  const $ = id => document.getElementById(id);
+  const sections = ["intro", "cluePanel", "pumpkinPanel", "teacherPanel", "winnerPanel"];
+  let currentClue = 0;
+  let pumpkinHits = 0;
+  let musicOn = false;
+  let soundOn = true;
+  let audioCtx = null;
+  let musicTimer = null;
+  let noteIndex = 0;
+  let toastTimer = null;
+  let explosionPlayed = false;
+  let selectedAnswer = null;
+  let answerLocked = false;
 
-  function showSection(id){
-    sections.forEach(s=>$(s).classList.toggle("hidden",s!==id));
-    window.scrollTo({top:0,behavior:"smooth"});
-  }
-  function toast(message){
-    $("toast").textContent=message;$("toast").classList.add("show");
-    clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),2400);
-  }
-  function feedback(id,message,good){
-    const el=$(id);el.textContent=message;el.className="feedback "+(good?"good":"bad");
-  }
-  function updateProgress(){
-    const count=Math.min(currentClue,4);
-    $("progressCount").textContent=count+" / 4 questions";
-    $("progressFill").style.width=(count/4*100)+"%";
-    $("progressText").textContent=count===4?"ALL QUESTIONS COMPLETE":"YOUR PROGRESS";
+  const normalize = s => s.trim().toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[’']/g, "'")
+    .replace(/\s+/g, " ")
+    .replace(/[.!?]+$/g, "");
+
+  function showSection(id) {
+    sections.forEach(s => $(s).classList.toggle("hidden", s !== id));
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function initAudio(){
-    if(!audioCtx){
-      const C=window.AudioContext||window.webkitAudioContext;
-      if(!C){toast("Your browser does not support audio.");return false}
-      audioCtx=new C();
+  function toast(message) {
+    $("toast").textContent = message;
+    $("toast").classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => $("toast").classList.remove("show"), 2400);
+  }
+
+  function feedback(id, message, good) {
+    const el = $(id);
+    el.textContent = message;
+    el.className = "feedback " + (good ? "good" : "bad");
+  }
+
+  function updateProgress() {
+    const count = Math.min(currentClue, 4);
+    $("progressCount").textContent = count + " / 4 questions";
+    $("progressFill").style.width = (count / 4 * 100) + "%";
+    $("progressText").textContent = count === 4 ? "ALL QUESTIONS COMPLETE" : "YOUR PROGRESS";
+  }
+
+  function initAudio() {
+    if (!audioCtx) {
+      const C = window.AudioContext || window.webkitAudioContext;
+      if (!C) { toast("Your browser does not support audio."); return false; }
+      audioCtx = new C();
     }
-    if(audioCtx.state==="suspended")audioCtx.resume();
+    if (audioCtx.state === "suspended") audioCtx.resume();
     return true;
   }
-  function tone(freq,duration,type="sine",volume=.15,delay=0,endFreq=null){
-    if(!soundOn||!initAudio())return;
-    const now=audioCtx.currentTime+delay;
-    const osc=audioCtx.createOscillator(),gain=audioCtx.createGain(),filter=audioCtx.createBiquadFilter();
-    osc.type=type;osc.frequency.setValueAtTime(Math.max(20,freq),now);
-    if(endFreq!==null)osc.frequency.exponentialRampToValueAtTime(Math.max(20,endFreq),now+duration);
-    filter.type="lowpass";filter.frequency.value=4500;
-    gain.gain.setValueAtTime(.0001,now);
-    gain.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),now+.015);
-    gain.gain.exponentialRampToValueAtTime(.0001,now+duration);
-    osc.connect(filter);filter.connect(gain);gain.connect(audioCtx.destination);
-    osc.start(now);osc.stop(now+duration+.04);
+
+  function tone(freq, duration, type = "sine", volume = 0.15, delay = 0, endFreq = null) {
+    if (!soundOn || !initAudio()) return;
+    const now = audioCtx.currentTime + delay;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const filter = audioCtx.createBiquadFilter();
+    osc.type = type;
+    osc.frequency.setValueAtTime(Math.max(20, freq), now);
+    if (endFreq !== null) osc.frequency.exponentialRampToValueAtTime(Math.max(20, endFreq), now + duration);
+    filter.type = "lowpass";
+    filter.frequency.value = 4500;
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(Math.max(0.0002, volume), now + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + duration + 0.04);
   }
-  function noiseBurst(duration=.35,volume=.16,lowpass=1200){
-    if(!soundOn||!initAudio())return;
-    const length=Math.floor(audioCtx.sampleRate*duration);
-    const buffer=audioCtx.createBuffer(1,length,audioCtx.sampleRate),data=buffer.getChannelData(0);
-    for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);
-    const source=audioCtx.createBufferSource(),filter=audioCtx.createBiquadFilter(),gain=audioCtx.createGain();
-    source.buffer=buffer;filter.type="lowpass";filter.frequency.value=lowpass;
-    gain.gain.setValueAtTime(volume,audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+duration);
-    source.connect(filter);filter.connect(gain);gain.connect(audioCtx.destination);source.start();
+
+  function noiseBurst(duration = 0.35, volume = 0.16, lowpass = 1200) {
+    if (!soundOn || !initAudio()) return;
+    const length = Math.floor(audioCtx.sampleRate * duration);
+    const buffer = audioCtx.createBuffer(1, length, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / length);
+    const source = audioCtx.createBufferSource();
+    const filter = audioCtx.createBiquadFilter();
+    const gain = audioCtx.createGain();
+    source.buffer = buffer;
+    filter.type = "lowpass";
+    filter.frequency.value = lowpass;
+    gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    source.start();
   }
-  function soundCorrect(){
-    tone(523,.16,"triangle",.2);tone(659,.18,"triangle",.2,.12);
-    tone(784,.28,"triangle",.22,.25);tone(1046,.4,"sine",.15,.42);
+
+  function soundCorrect() {
+    tone(523, 0.16, "triangle", 0.2);
+    tone(659, 0.18, "triangle", 0.2, 0.12);
+    tone(784, 0.28, "triangle", 0.22, 0.25);
+    tone(1046, 0.4, "sine", 0.15, 0.42);
   }
-  function soundWrong(){
-    tone(180,.3,"sawtooth",.16,0,95);tone(115,.35,"square",.09,.12,65);
-    noiseBurst(.18,.07,600);
+  function soundWrong() {
+    tone(180, 0.3, "sawtooth", 0.16, 0, 95);
+    tone(115, 0.35, "square", 0.09, 0.12, 65);
+    noiseBurst(0.18, 0.07, 600);
   }
-  function soundUnlock(){
-    tone(110,.45,"sine",.28,0,220);tone(440,.5,"triangle",.15,.1,880);
-    tone(880,.7,"sine",.12,.25,1320);noiseBurst(.25,.08,2600);
+  function soundUnlock() {
+    tone(110, 0.45, "sine", 0.28, 0, 220);
+    tone(440, 0.5, "triangle", 0.15, 0.1, 880);
+    tone(880, 0.7, "sine", 0.12, 0.25, 1320);
+    noiseBurst(0.25, 0.08, 2600);
   }
-  function soundHit(){
-    tone(115,.13,"sine",.24,0,65);noiseBurst(.12,.14,700);
-    tone(210,.1,"triangle",.08,.02,110);
+  function soundHit() {
+    tone(115, 0.13, "sine", 0.24, 0, 65);
+    noiseBurst(0.12, 0.14, 700);
+    tone(210, 0.1, "triangle", 0.08, 0.02, 110);
   }
-  function soundExplosion(){
-    noiseBurst(.9,.42,1800);tone(75,1.1,"sine",.4,0,28);
-    tone(55,.9,"triangle",.24,.08,30);tone(400,.4,"sawtooth",.12,.15,65);
-    setTimeout(()=>{tone(880,.7,"sine",.16);tone(660,.7,"triangle",.12,.15);tone(440,.9,"sine",.12,.3)},500);
+  function soundExplosion() {
+    noiseBurst(0.9, 0.42, 1800);
+    tone(75, 1.1, "sine", 0.4, 0, 28);
+    tone(55, 0.9, "triangle", 0.24, 0.08, 30);
+    tone(400, 0.4, "sawtooth", 0.12, 0.15, 65);
+    setTimeout(() => {
+      tone(880, 0.7, "sine", 0.16);
+      tone(660, 0.7, "triangle", 0.12, 0.15);
+      tone(440, 0.9, "sine", 0.12, 0.3);
+    }, 500);
   }
-  function musicStep(){
-    if(!musicOn||!audioCtx)return;
-    const step=noteIndex%16;
-    const bass=[55,55,65.4,55,49,49,73.4,65.4];
-    const eerie=[220,0,261.6,233.1,0,196,207.7,0,293.7,0,261.6,220,0,174.6,207.7,0];
-    tone(bass[step%bass.length],.85,"triangle",.11,0,bass[step%bass.length]*.94);
-    if(step%4===0){tone(82.4,1.4,"sine",.14,0,41.2);tone(164.8,.7,"sawtooth",.025,.05,82.4)}
-    if(eerie[step])tone(eerie[step],.65,"sine",.075,.02,eerie[step]*.96);
-    if(step===7||step===15)tone(1046,.8,"triangle",.035,.1,523);
-    if(step===11)noiseBurst(.18,.035,500);
+
+  function musicStep() {
+    if (!musicOn || !audioCtx) return;
+    const step = noteIndex % 16;
+    const bass = [55, 55, 65.4, 55, 49, 49, 73.4, 65.4];
+    const eerie = [220, 0, 261.6, 233.1, 0, 196, 207.7, 0, 293.7, 0, 261.6, 220, 0, 174.6, 207.7, 0];
+    tone(bass[step % bass.length], 0.85, "triangle", 0.11, 0, bass[step % bass.length] * 0.94);
+    if (step % 4 === 0) {
+      tone(82.4, 1.4, "sine", 0.14, 0, 41.2);
+      tone(164.8, 0.7, "sawtooth", 0.025, 0.05, 82.4);
+    }
+    if (eerie[step]) tone(eerie[step], 0.65, "sine", 0.075, 0.02, eerie[step] * 0.96);
+    if (step === 7 || step === 15) tone(1046, 0.8, "triangle", 0.035, 0.1, 523);
+    if (step === 11) noiseBurst(0.18, 0.035, 500);
     noteIndex++;
   }
-  function startMusic(){
-    if(!initAudio())return;
-    musicOn=true;$("musicBtn").textContent="♫ Music ON";$("musicBtn").style.borderColor="#ff7518";
-    if(musicTimer)clearInterval(musicTimer);
-    musicStep();musicTimer=setInterval(musicStep,430);toast("Spooky music activated 👻");
+
+  function startMusic() {
+    if (!initAudio()) return;
+    musicOn = true;
+    $("musicBtn").textContent = "♫ Music ON";
+    $("musicBtn").style.borderColor = "#ff7518";
+    if (musicTimer) clearInterval(musicTimer);
+    musicStep();
+    musicTimer = setInterval(musicStep, 430);
+    toast("Spooky music activated 👻");
   }
-  function stopMusic(){
-    musicOn=false;$("musicBtn").textContent="♫ Start music";$("musicBtn").style.borderColor="";
-    if(musicTimer)clearInterval(musicTimer);musicTimer=null;
+  function stopMusic() {
+    musicOn = false;
+    $("musicBtn").textContent = "♫ Music";
+    $("musicBtn").style.borderColor = "";
+    if (musicTimer) clearInterval(musicTimer);
+    musicTimer = null;
   }
-  $("musicBtn").addEventListener("click",()=>{if(musicOn){stopMusic();toast("Music paused.")}else startMusic()});
-  $("soundBtn").addEventListener("click",()=>{
-    soundOn=!soundOn;$("soundBtn").textContent=soundOn?"🔊 Sound ON":"🔇 Sound OFF";
-    if(soundOn){initAudio();tone(600,.15,"triangle",.12);toast("Sound effects enabled")}
+
+  $("musicBtn").addEventListener("click", () => {
+    if (musicOn) { stopMusic(); toast("Music paused."); }
+    else startMusic();
+  });
+  $("soundBtn").addEventListener("click", () => {
+    soundOn = !soundOn;
+    $("soundBtn").textContent = soundOn ? "🔊 Sound ON" : "🔇 Sound OFF";
+    if (soundOn) { initAudio(); tone(600, 0.15, "triangle", 0.12); toast("Sound effects enabled"); }
     else toast("Sound effects muted");
   });
 
-  function loadClue(){
-    const clue=clues[currentClue];
-    selectedAnswer=null;answerLocked=false;
-    $("clueEyebrow").textContent="HALLOWEEN QUIZ • QUESTION "+(currentClue+1);
-    $("clueTitle").textContent=clue.title;
-    $("clueBadge").textContent="QUESTION "+(currentClue+1)+" OF 4";
-    $("riddleText").textContent=clue.riddle;
-    $("answers").innerHTML="";
-    clue.answers.forEach((answer,index)=>{
-      const button=document.createElement("button");
-      button.type="button";button.className="answer-option";
-      button.innerHTML='<span class="letter">'+String.fromCharCode(65+index)+'</span><span></span>';
-      button.querySelector("span:last-child").textContent=answer;
-      button.addEventListener("click",()=>{
-        if(answerLocked)return;
-        selectedAnswer=index;
-        $("answers").querySelectorAll(".answer-option").forEach(b=>b.classList.remove("selected"));
+  function loadClue() {
+    const clue = clues[currentClue];
+    selectedAnswer = null;
+    answerLocked = false;
+
+    $("clueEyebrow").textContent = "HALLOWEEN QUIZ • QUESTION " + (currentClue + 1);
+    $("clueTitle").textContent = clue.title;
+    $("clueBadge").textContent = "QUESTION " + (currentClue + 1) + " OF 4";
+    $("riddleText").textContent = clue.riddle;
+
+    $("answers").innerHTML = "";
+    clue.answers.forEach((answer, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "answer-option";
+      button.innerHTML = '<span class="letter">' + String.fromCharCode(65 + index) + '</span><span></span>';
+      button.querySelector("span:last-child").textContent = answer;
+      button.addEventListener("click", () => {
+        if (answerLocked) return;
+        selectedAnswer = index;
+        $("answers").querySelectorAll(".answer-option").forEach(b => b.classList.remove("selected"));
         button.classList.add("selected");
-        feedback("answerFeedback","Selected option "+String.fromCharCode(65+index)+". Press confirm when you're ready.",true);
+        feedback("answerFeedback", "Selected option " + String.fromCharCode(65 + index) + ". Press confirm when you're ready.", true);
       });
       $("answers").appendChild(button);
     });
-    $("codeInput").value="";$("codeArea").classList.add("hidden");
-    $("answerBtn").disabled=false;$("answerBtn").textContent="CONFIRM ANSWER";
-    feedback("answerFeedback","Choose one of the four answers.",true);
-    feedback("codeFeedback","",true);updateProgress();showSection("cluePanel");
+
+    $("codeInput").value = "";
+    $("codeArea").classList.add("hidden");
+    $("answerBtn").disabled = false;
+    $("answerBtn").textContent = "CONFIRM ANSWER";
+    feedback("answerFeedback", "Choose one of the four answers (A, B, C or D).", true);
+    feedback("codeFeedback", "", true);
+    updateProgress();
+    showSection("cluePanel");
   }
 
-  $("startBtn").addEventListener("click",()=>{
-    initAudio();soundUnlock();if(!musicOn)startMusic();currentClue=0;loadClue();
+  $("startBtn").addEventListener("click", () => {
+    initAudio();
+    soundUnlock();
+    if (!musicOn) startMusic();
+    currentClue = 0;
+    loadClue();
   });
 
-  function checkAnswer(){
-    if(selectedAnswer===null){feedback("answerFeedback","Select an answer first!",false);soundWrong();return}
-    if(answerLocked)return;
-    if(selectedAnswer===clues[currentClue].correct){
-      answerLocked=true;soundCorrect();
-      $("answers").querySelectorAll(".answer-option").forEach(b=>b.disabled=true);
-      feedback("answerFeedback","✓ Correct! Excellent Halloween knowledge.",true);
-      $("locationMessage").textContent=clues[currentClue].location;
-      $("codeArea").classList.remove("hidden");
-      $("answerBtn").disabled=true;$("answerBtn").textContent="CORRECT ANSWER ✓";
-      $("codeInput").focus({preventScroll:true});
-    }else{
+  function checkAnswer() {
+    if (selectedAnswer === null) {
+      feedback("answerFeedback", "Select an answer first!", false);
       soundWrong();
-      feedback("answerFeedback","✕ Incorrect! Try another option.",false);
-      $("cluePanel").classList.remove("shake");void $("cluePanel").offsetWidth;$("cluePanel").classList.add("shake");
+      return;
+    }
+    if (answerLocked) return;
+
+    if (selectedAnswer === clues[currentClue].correct) {
+      answerLocked = true;
+      soundCorrect();
+      $("answers").querySelectorAll(".answer-option").forEach(b => b.disabled = true);
+      feedback("answerFeedback", "✓ Correct! Excellent Halloween knowledge.", true);
+      $("locationMessage").textContent = clues[currentClue].location;
+      $("codeArea").classList.remove("hidden");
+      $("answerBtn").disabled = true;
+      $("answerBtn").textContent = "CORRECT ANSWER ✓";
+      $("codeInput").focus({ preventScroll: true });
+    } else {
+      soundWrong();
+      feedback("answerFeedback", "✕ Incorrect! Try another option.", false);
+      $("cluePanel").classList.remove("shake");
+      void $("cluePanel").offsetWidth;
+      $("cluePanel").classList.add("shake");
     }
   }
 
-  function checkCode(){
-    if(normalize($("codeInput").value)!==normalize(clues[currentClue].code)){
-      soundWrong();feedback("codeFeedback","Incorrect code. Check the indicated location!",false);return;
+  function checkCode() {
+    if (normalize($("codeInput").value) !== normalize(clues[currentClue].code)) {
+      soundWrong();
+      feedback("codeFeedback", "Incorrect code. Check the indicated location!", false);
+      return;
     }
-    soundUnlock();toast("SECRET CODE ACCEPTED 🔓");currentClue++;updateProgress();
-    if(currentClue<clues.length)setTimeout(loadClue,650);
-    else setTimeout(()=>{feedback("pumpkinFeedback","All four questions complete! Break the curse!",true);showSection("pumpkinPanel")},650);
+    soundUnlock();
+    toast("SECRET CODE ACCEPTED 🔓");
+    currentClue++;
+    updateProgress();
+    if (currentClue < clues.length) {
+      setTimeout(loadClue, 650);
+    } else {
+      setTimeout(() => {
+        feedback("pumpkinFeedback", "All four questions complete! Break the curse!", true);
+        showSection("pumpkinPanel");
+      }, 650);
+    }
   }
-  $("answerBtn").addEventListener("click",checkAnswer);
-  $("codeBtn").addEventListener("click",checkCode);
-  $("codeInput").addEventListener("keydown",e=>{if(e.key==="Enter")checkCode()});
 
-  $("pumpkinHit").addEventListener("click",()=>{
-    if(pumpkinHits>=8)return;
-    pumpkinHits++;$("hitCount").textContent=pumpkinHits;
-    $("hitFill").style.width=(pumpkinHits/8*100)+"%";soundHit();
-    const pumpkin=$("pumpkinHit");
-    pumpkin.style.transform="scale(.85) rotate("+(Math.random()*20-10)+"deg)";
-    setTimeout(()=>pumpkin.style.transform="",100);
-    if(pumpkinHits<8){
-      feedback("pumpkinFeedback","The pumpkin trembles... "+(8-pumpkinHits)+" more hit(s)!",true);
-    }else if(!explosionPlayed){
-      explosionPlayed=true;soundExplosion();$("pumpkinHit").textContent="💥";
-      feedback("pumpkinFeedback","THE CURSE IS BROKEN! The pumpkin has exploded!",true);
-      $("pumpkinCodeDisplay").textContent=pumpkinCode;
-      $("pumpkinCodeArea").classList.remove("hidden");toast("BOOOOM! 🎃💥");
+  $("answerBtn").addEventListener("click", checkAnswer);
+  $("codeBtn").addEventListener("click", checkCode);
+  $("codeInput").addEventListener("keydown", e => { if (e.key === "Enter") checkCode(); });
+
+  $("pumpkinHit").addEventListener("click", () => {
+    if (pumpkinHits >= 8) return;
+    pumpkinHits++;
+    $("hitCount").textContent = pumpkinHits;
+    $("hitFill").style.width = (pumpkinHits / 8 * 100) + "%";
+    soundHit();
+    const pumpkin = $("pumpkinHit");
+    pumpkin.style.transform = "scale(0.85) rotate(" + (Math.random() * 20 - 10) + "deg)";
+    setTimeout(() => pumpkin.style.transform = "", 100);
+
+    if (pumpkinHits < 8) {
+      feedback("pumpkinFeedback", "The pumpkin trembles... " + (8 - pumpkinHits) + " more hit(s)!", true);
+    } else if (!explosionPlayed) {
+      explosionPlayed = true;
+      soundExplosion();
+      $("pumpkinHit").textContent = "💥";
+      feedback("pumpkinFeedback", "THE CURSE IS BROKEN! The pumpkin has exploded!", true);
+      $("pumpkinCodeDisplay").textContent = pumpkinCode;
+      $("pumpkinCodeArea").classList.remove("hidden");
+      toast("BOOOOM! 🎃💥");
     }
   });
 
-  $("pumpkinCodeBtn").addEventListener("click",()=>{
-    if(normalize($("pumpkinCodeInput").value)!==normalize(pumpkinCode)){
-      soundWrong();feedback("pumpkinCodeFeedback","Wrong code! Check the code revealed after the explosion.",false);return;
+  $("pumpkinCodeBtn").addEventListener("click", () => {
+    if (normalize($("pumpkinCodeInput").value) !== normalize(pumpkinCode)) {
+      soundWrong();
+      feedback("pumpkinCodeFeedback", "Wrong code! Check the code revealed after the explosion.", false);
+      return;
     }
-    soundUnlock();feedback("pumpkinCodeFeedback","Code accepted! Proceed to the teachers' stand.",true);
-    const text="HALLOWEEN TREASURE HUNT - TEACHERS STAND - Ask the teacher for the final question and secret code.";
-    $("teacherQR").src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data="+encodeURIComponent(text);
-    setTimeout(()=>showSection("teacherPanel"),700);
+    soundUnlock();
+    feedback("pumpkinCodeFeedback", "Code accepted! Proceed to the teachers' stand.", true);
+    const text = "HALLOWEEN TREASURE HUNT - TEACHERS STAND - Ask the teacher for the final question and secret code.";
+    $("teacherQR").src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(text);
+    setTimeout(() => showSection("teacherPanel"), 700);
   });
 
-  $("teacherCodeBtn").addEventListener("click",()=>{
-    if(normalize($("teacherCodeInput").value)!==normalize(teachersCode)){
-      soundWrong();feedback("teacherFeedback","Incorrect code. Answer the teachers' final question first.",false);return;
+  $("teacherCodeBtn").addEventListener("click", () => {
+    if (normalize($("teacherCodeInput").value) !== normalize(teachersCode)) {
+      soundWrong();
+      feedback("teacherFeedback", "Incorrect code. Answer the teachers' final question first.", false);
+      return;
     }
-    soundUnlock();feedback("teacherFeedback","FINAL CODE ACCEPTED! The treasure is unlocked.",true);
-    const text="HALLOWEEN TREASURE HUNT - WINNER - Show this QR to the organizer to claim your prize.";
-    $("winnerQR").src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data="+encodeURIComponent(text);
-    setTimeout(()=>{showSection("winnerPanel");soundExplosion();toast("YOU FOUND THE TREASURE! 🏆")},700);
+    soundUnlock();
+    feedback("teacherFeedback", "FINAL CODE ACCEPTED! The treasure is unlocked.", true);
+    const text = "HALLOWEEN TREASURE HUNT - WINNER - Show this QR to the organizer to claim your prize.";
+    $("winnerQR").src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(text);
+    setTimeout(() => {
+      showSection("winnerPanel");
+      soundExplosion();
+      toast("YOU FOUND THE TREASURE! 🏆");
+    }, 700);
   });
-  $("teacherCodeInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("teacherCodeBtn").click()});
-  $("pumpkinCodeInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("pumpkinCodeBtn").click()});
+
+  $("teacherCodeInput").addEventListener("keydown", e => { if (e.key === "Enter") $("teacherCodeBtn").click(); });
+  $("pumpkinCodeInput").addEventListener("keydown", e => { if (e.key === "Enter") $("pumpkinCodeBtn").click(); });
+
   updateProgress();
 });
 </script>
