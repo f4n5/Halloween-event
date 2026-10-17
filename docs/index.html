@@ -10,19 +10,16 @@
   --orange: #ff7518;
   --gold: #ffb347;
   --bg: #09070d;
-  --panel: #15111d;
   --muted: #aaa2b6;
-  --red: #ff3030;
 }
 * { box-sizing: border-box; }
 body {
   margin: 0;
   min-height: 100vh;
   color: #fff;
-  background:
-    radial-gradient(ellipse at 50% 0%, #35152a 0%, transparent 55%),
-    radial-gradient(ellipse at 90% 90%, #25112e 0%, transparent 45%),
-    var(--bg);
+  background: radial-gradient(ellipse at 50% 0%, #35152a 0%, transparent 55%),
+              radial-gradient(ellipse at 90% 90%, #25112e 0%, transparent 45%),
+              var(--bg);
   font-family: system-ui, Arial, sans-serif;
   overflow-x: hidden;
 }
@@ -56,6 +53,7 @@ button:focus-visible, input:focus-visible {
   color: var(--orange);
   font-weight: 900;
   letter-spacing: 2px;
+  font-size: 19px;
 }
 .audio-controls { display: flex; gap: 8px; flex-wrap: wrap; }
 .small-btn {
@@ -123,16 +121,6 @@ p { line-height: 1.65; }
   transition: transform .15s, filter .15s;
 }
 .primary:hover { transform: translateY(-2px); filter: brightness(1.1); }
-.secondary {
-  display: block;
-  width: 100%;
-  margin-top: 10px;
-  padding: 12px;
-  border: 1px solid #49364f;
-  border-radius: 9px;
-  color: white;
-  background: #211927;
-}
 .field {
   display: block;
   width: 100%;
@@ -189,11 +177,6 @@ p { line-height: 1.65; }
   line-height: 1.7;
   margin: 20px 0;
   white-space: pre-line;
-}
-.code-note {
-  color: var(--muted);
-  font-size: 13px;
-  margin-top: 8px;
 }
 .pumpkin-game { text-align: center; }
 .pumpkin-hit {
@@ -261,7 +244,7 @@ p { line-height: 1.65; }
 <body>
 
 <header class="topbar">
-  <div class="brand">FW • HALLOWEEN</div>
+  <div class="brand">HALLOWEEN</div>
   <div class="audio-controls">
     <button class="small-btn" id="musicBtn">♫ Start music</button>
     <button class="small-btn" id="soundBtn">🔊 Sound ON</button>
@@ -272,13 +255,13 @@ p { line-height: 1.65; }
   <section class="hero">
     <div class="pumpkin">🎃</div>
     <h1>HALLOWEEN<br><span>TREASURE HUNT</span></h1>
-    <p class="subtitle">Four clues. Secret codes. One final treasure.<br>Do you dare to begin?</p>
+    <p class="subtitle">Four Halloween questions. Secret codes. One final treasure.<br>Do you dare to begin?</p>
   </section>
 
   <div class="progress-area">
     <div class="progress-label">
       <span id="progressText">YOUR PROGRESS</span>
-      <span id="progressCount">0 / 4 clues</span>
+      <span id="progressCount">0 / 4 questions</span>
     </div>
     <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
   </div>
@@ -286,26 +269,26 @@ p { line-height: 1.65; }
   <section class="panel" id="intro">
     <div class="eyebrow">⚠️ The hunt begins</div>
     <h2>Welcome, brave explorer.</h2>
-    <p>You must solve each riddle, find the correct place, and discover its secret code.</p>
-    <p class="muted">Keep every code safe. You will need them to reach the end. And don't trust every shadow you see...</p>
+    <p>Answer four Halloween questions, find the secret codes, and survive the cursed pumpkin challenge.</p>
+    <p class="muted">Some answers are trickier than they seem. Remember every code: you will need them to reach the treasure.</p>
     <button class="primary" id="startBtn">ENTER THE DARKNESS →</button>
   </section>
 
   <section class="panel hidden" id="cluePanel">
-    <div class="eyebrow" id="clueEyebrow">CLUE 01</div>
-    <h2 id="clueTitle">The first mystery</h2>
-    <span class="clue-number" id="clueBadge">CLUE 1 OF 4</span>
+    <div class="eyebrow" id="clueEyebrow">HALLOWEEN QUIZ</div>
+    <h2 id="clueTitle">Question 1</h2>
+    <span class="clue-number" id="clueBadge">QUESTION 1 OF 4</span>
     <p class="riddle" id="riddleText"></p>
-    <label for="answerInput" class="muted">Where should you look?</label>
-    <input class="field" id="answerInput" autocomplete="off" placeholder="Enter the location...">
+    <label for="answerInput" class="muted">Your answer:</label>
+    <input class="field" id="answerInput" autocomplete="off" placeholder="Type your answer in English...">
     <button class="primary" id="answerBtn">CHECK ANSWER</button>
     <div class="feedback" id="answerFeedback" aria-live="polite"></div>
 
     <div class="hidden" id="codeArea">
       <p id="locationMessage"></p>
-      <label for="codeInput" class="muted">Enter the secret code you found there:</label>
+      <label for="codeInput" class="muted">Enter the secret code hidden at the location:</label>
       <input class="field" id="codeInput" autocomplete="off" placeholder="Secret code...">
-      <button class="primary" id="codeBtn">UNLOCK NEXT CLUE</button>
+      <button class="primary" id="codeBtn">UNLOCK NEXT QUESTION</button>
       <div class="feedback" id="codeFeedback" aria-live="polite"></div>
     </div>
   </section>
@@ -336,10 +319,8 @@ p { line-height: 1.65; }
     <div class="eyebrow">FINAL CHECKPOINT</div>
     <h2>Find the teachers' stand</h2>
     <p>Show this QR code to the teachers at their stand. They will ask you the final question and give you a secret code.</p>
-    <div id="teacherQRWrap">
-      <img class="qr" id="teacherQR" alt="QR code for the teachers' checkpoint">
-    </div>
-    <p class="muted" style="text-align:center">Ask a teacher for the final code. Do not guess!</p>
+    <img class="qr" id="teacherQR" alt="QR code for the teachers' checkpoint">
+    <p class="muted" style="text-align:center">Answer the teacher's question to earn the final code.</p>
     <label for="teacherCodeInput" class="muted">Enter the code given by the teachers:</label>
     <input class="field" id="teacherCodeInput" autocomplete="off" placeholder="Teachers' secret code...">
     <button class="primary" id="teacherCodeBtn">UNLOCK THE TREASURE</button>
@@ -350,76 +331,65 @@ p { line-height: 1.65; }
     <div class="final-emoji">🏆🎃</div>
     <div class="eyebrow">YOU DID IT</div>
     <h2>THE TREASURE IS YOURS!</h2>
-    <p>You solved the riddles, broke the curse, and survived the hunt.</p>
+    <p>You solved the Halloween quiz, broke the curse, and survived the hunt.</p>
     <p><strong>Show this final QR code to claim your prize!</strong></p>
     <img class="qr" id="winnerQR" alt="Winner QR code">
     <p class="muted">Happy Halloween, brave explorer. 👻</p>
   </section>
 </main>
 
-<div class="footer">MADE FOR A SPOOKY HALLOWEEN • GOOD LUCK 👻</div>
+<div class="footer">HAPPY HALLOWEEN • GOOD LUCK 👻</div>
 <div id="toast" role="status"></div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  /*
-    GAME SETTINGS
-    If your original secret codes were different, change them here.
-    Answers are checked without caring about uppercase/lowercase.
-  */
   const clues = [
     {
-      title: "Where colours grow",
-      riddle: "I have many colours, but I am not a rainbow.\nI grow from the ground and make the world beautiful.\nLook around me to find your next secret.",
-      answers: ["flowers", "the flowers", "around the flowers"],
-      location: "Check around the flowers.",
+      title: "The Origins of Halloween",
+      riddle: "Halloween developed from an ancient Celtic festival called Samhain. What did people traditionally believe the festival marked?",
+      answers: ["the boundary between the living and the dead became blurred", "the boundary between the living and dead became blurred", "the end of the harvest and the beginning of winter", "the end of harvest and beginning of winter"],
+      location: "Find the first secret code at the flowers.",
       code: "PETALS",
-      next: "The flowers have revealed the first secret."
+      next: "The first secret has been revealed."
     },
     {
-      title: "The resting place",
-      riddle: "People sit on me when their legs need a rest.\nI stand still while the world walks by.\nFind me, and search for what I hide.",
-      answers: ["benches", "bench", "the benches", "the bench"],
-      location: "Check around the benches.",
+      title: "A Sweet Tradition",
+      riddle: "The phrase 'trick or treat' is associated with Halloween. What are children traditionally asking for when they go door to door?",
+      answers: ["candy or a trick", "sweets or a trick", "treats or a trick", "candy", "sweets"],
+      location: "Find the second secret code at the benches.",
       code: "WOOD",
-      next: "You found the second secret. Keep going..."
+      next: "The second secret has been revealed."
     },
     {
-      title: "The silent leader",
-      riddle: "I am a face from history, made to last.\nI watch the people as they walk past.\nLook for the bust of a famous Chilean hero.",
-      answers: ["o'higgins", "ohiggins", "o'higgins bust", "the o'higgins bust", "bust of o'higgins", "bernardo o'higgins"],
-      location: "Check around the O’Higgins bust.",
+      title: "The Jack-o'-Lantern",
+      riddle: "According to an Irish legend, a man named Stingy Jack wandered with a carved turnip. What vegetable is most commonly carved into jack-o'-lanterns today?",
+      answers: ["pumpkin", "a pumpkin", "pumpkins"],
+      location: "Find the third secret code near the bust of O’Higgins.",
       code: "LIBERTY",
-      next: "History has given you another secret."
+      next: "The third secret has been revealed."
     },
     {
-      title: "The whispering giants",
-      riddle: "My feet are hidden deep below.\nMy arms reach high, but I never go.\nLook around the trees to discover the last clue.",
-      answers: ["trees", "the trees", "tree", "the tree"],
-      location: "Check around the trees.",
+      title: "The Supernatural",
+      riddle: "In traditional Halloween folklore, which creature is said to transform into a bat and is famously associated with drinking blood?",
+      answers: ["vampire", "a vampire", "vampires"],
+      location: "Find the fourth secret code around the trees.",
       code: "ROOTS",
-      next: "You have collected all four location secrets."
+      next: "All four Halloween questions are complete."
     }
   ];
 
   const pumpkinCode = "NIGHT8";
   const teachersCode = "SPOOKY";
-
   const $ = id => document.getElementById(id);
   const sections = ["intro", "cluePanel", "pumpkinPanel", "teacherPanel", "winnerPanel"];
-  let currentClue = 0;
-  let pumpkinHits = 0;
-  let musicOn = false;
-  let soundOn = true;
-  let audioCtx = null;
-  let musicTimer = null;
-  let noteIndex = 0;
-  let toastTimer = null;
+  let currentClue = 0, pumpkinHits = 0, musicOn = false, soundOn = true;
+  let audioCtx = null, musicTimer = null, noteIndex = 0, toastTimer = null;
   let explosionPlayed = false;
 
   const normalize = s => s.trim().toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/[’]/g, "'").replace(/\s+/g, " ");
+    .replace(/[’]/g, "'").replace(/\s+/g, " ")
+    .replace(/[.!?]+$/g, "");
 
   function showSection(id) {
     sections.forEach(s => $(s).classList.toggle("hidden", s !== id));
@@ -441,16 +411,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateProgress() {
     const count = Math.min(currentClue, 4);
-    $("progressCount").textContent = count + " / 4 clues";
+    $("progressCount").textContent = count + " / 4 questions";
     $("progressFill").style.width = (count / 4 * 100) + "%";
-    $("progressText").textContent = count === 4 ? "ALL CLUES FOUND" : "YOUR PROGRESS";
+    $("progressText").textContent = count === 4 ? "ALL QUESTIONS COMPLETE" : "YOUR PROGRESS";
   }
 
-  /*
-    SOUND ENGINE
-    All sounds are synthesized locally using Web Audio.
-    No audio files or external libraries are required.
-  */
   function initAudio() {
     if (!audioCtx) {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -464,38 +429,33 @@ document.addEventListener("DOMContentLoaded", () => {
     return true;
   }
 
-  function tone(freq, duration, type = "sine", volume = 0.15, delay = 0, endFreq = null) {
+  function tone(freq, duration, type = "sine", volume = .15, delay = 0, endFreq = null) {
     if (!soundOn || !initAudio()) return;
     const now = audioCtx.currentTime + delay;
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     const filter = audioCtx.createBiquadFilter();
-
     osc.type = type;
     osc.frequency.setValueAtTime(Math.max(20, freq), now);
-    if (endFreq !== null) {
-      osc.frequency.exponentialRampToValueAtTime(Math.max(20, endFreq), now + duration);
-    }
+    if (endFreq !== null) osc.frequency.exponentialRampToValueAtTime(Math.max(20, endFreq), now + duration);
     filter.type = "lowpass";
     filter.frequency.value = 4500;
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(Math.max(0.0002, volume), now + 0.015);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    gain.gain.setValueAtTime(.0001, now);
+    gain.gain.exponentialRampToValueAtTime(Math.max(.0002, volume), now + .015);
+    gain.gain.exponentialRampToValueAtTime(.0001, now + duration);
     osc.connect(filter);
     filter.connect(gain);
     gain.connect(audioCtx.destination);
     osc.start(now);
-    osc.stop(now + duration + 0.04);
+    osc.stop(now + duration + .04);
   }
 
-  function noiseBurst(duration = 0.35, volume = 0.16, lowpass = 1200) {
+  function noiseBurst(duration = .35, volume = .16, lowpass = 1200) {
     if (!soundOn || !initAudio()) return;
     const length = Math.floor(audioCtx.sampleRate * duration);
     const buffer = audioCtx.createBuffer(1, length, audioCtx.sampleRate);
     const data = buffer.getChannelData(0);
-    for (let i = 0; i < length; i++) {
-      data[i] = (Math.random() * 2 - 1) * (1 - i / length);
-    }
+    for (let i = 0; i < length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / length);
     const source = audioCtx.createBufferSource();
     const filter = audioCtx.createBiquadFilter();
     const gain = audioCtx.createGain();
@@ -503,7 +463,7 @@ document.addEventListener("DOMContentLoaded", () => {
     filter.type = "lowpass";
     filter.frequency.value = lowpass;
     gain.gain.setValueAtTime(volume, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    gain.gain.exponentialRampToValueAtTime(.0001, audioCtx.currentTime + duration);
     source.connect(filter);
     filter.connect(gain);
     gain.connect(audioCtx.destination);
@@ -516,26 +476,22 @@ document.addEventListener("DOMContentLoaded", () => {
     tone(784, .28, "triangle", .22, .25);
     tone(1046, .4, "sine", .15, .42);
   }
-
   function soundWrong() {
     tone(180, .3, "sawtooth", .16, 0, 95);
     tone(115, .35, "square", .09, .12, 65);
     noiseBurst(.18, .07, 600);
   }
-
   function soundUnlock() {
     tone(110, .45, "sine", .28, 0, 220);
     tone(440, .5, "triangle", .15, .1, 880);
     tone(880, .7, "sine", .12, .25, 1320);
     noiseBurst(.25, .08, 2600);
   }
-
   function soundHit() {
     tone(115, .13, "sine", .24, 0, 65);
     noiseBurst(.12, .14, 700);
     tone(210, .1, "triangle", .08, .02, 110);
   }
-
   function soundExplosion() {
     noiseBurst(.9, .42, 1800);
     tone(75, 1.1, "sine", .4, 0, 28);
@@ -548,28 +504,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500);
   }
 
-  // Original spooky ambient loop: low drone, dissonant notes, and eerie bells.
   function musicStep() {
     if (!musicOn || !audioCtx) return;
-
     const step = noteIndex % 16;
-    const bassNotes = [55, 55, 65.4, 55, 49, 49, 73.4, 65.4];
-    const eerieNotes = [220, 0, 261.6, 233.1, 0, 196, 207.7, 0,
-                        293.7, 0, 261.6, 220, 0, 174.6, 207.7, 0];
-
-    tone(bassNotes[step % bassNotes.length], .85, "triangle", .11, 0,
-         bassNotes[step % bassNotes.length] * .94);
-
+    const bassNotes = [55,55,65.4,55,49,49,73.4,65.4];
+    const eerieNotes = [220,0,261.6,233.1,0,196,207.7,0,293.7,0,261.6,220,0,174.6,207.7,0];
+    tone(bassNotes[step % bassNotes.length], .85, "triangle", .11, 0, bassNotes[step % bassNotes.length] * .94);
     if (step % 4 === 0) {
       tone(82.4, 1.4, "sine", .14, 0, 41.2);
       tone(164.8, .7, "sawtooth", .025, .05, 82.4);
     }
-    if (eerieNotes[step]) {
-      tone(eerieNotes[step], .65, "sine", .075, .02, eerieNotes[step] * .96);
-    }
-    if (step === 7 || step === 15) {
-      tone(1046, .8, "triangle", .035, .1, 523);
-    }
+    if (eerieNotes[step]) tone(eerieNotes[step], .65, "sine", .075, .02, eerieNotes[step] * .96);
+    if (step === 7 || step === 15) tone(1046, .8, "triangle", .035, .1, 523);
     if (step === 11) noiseBurst(.18, .035, 500);
     noteIndex++;
   }
@@ -584,7 +530,6 @@ document.addEventListener("DOMContentLoaded", () => {
     musicTimer = setInterval(musicStep, 430);
     toast("Spooky music activated 👻");
   }
-
   function stopMusic() {
     musicOn = false;
     $("musicBtn").textContent = "♫ Start music";
@@ -594,43 +539,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   $("musicBtn").addEventListener("click", () => {
-    if (musicOn) {
-      stopMusic();
-      toast("Music paused.");
-    } else {
-      startMusic();
-    }
+    if (musicOn) { stopMusic(); toast("Music paused."); }
+    else startMusic();
   });
-
   $("soundBtn").addEventListener("click", () => {
     soundOn = !soundOn;
     $("soundBtn").textContent = soundOn ? "🔊 Sound ON" : "🔇 Sound OFF";
-    if (soundOn) {
-      initAudio();
-      tone(600, .15, "triangle", .12);
-      toast("Sound effects enabled.");
-    } else {
-      toast("Sound effects muted.");
-    }
+    if (soundOn) { initAudio(); tone(600, .15, "triangle", .12); toast("Sound effects enabled."); }
+    else toast("Sound effects muted.");
   });
 
   function loadClue() {
     const clue = clues[currentClue];
-    $("clueEyebrow").textContent = "SECRET FILE • CLUE 0" + (currentClue + 1);
+    $("clueEyebrow").textContent = "HALLOWEEN QUIZ • QUESTION " + (currentClue + 1);
     $("clueTitle").textContent = clue.title;
-    $("clueBadge").textContent = "CLUE " + (currentClue + 1) + " OF 4";
+    $("clueBadge").textContent = "QUESTION " + (currentClue + 1) + " OF 4";
     $("riddleText").textContent = clue.riddle;
     $("answerInput").value = "";
     $("codeInput").value = "";
     $("codeArea").classList.add("hidden");
-    feedback("answerFeedback", "Read carefully. Every word matters...", true);
+    feedback("answerFeedback", "Think carefully before answering...", true);
     feedback("codeFeedback", "", true);
     $("answerInput").disabled = false;
     $("answerBtn").disabled = false;
     $("answerBtn").textContent = "CHECK ANSWER";
     updateProgress();
     showSection("cluePanel");
-    $("answerInput").focus({preventScroll:true});
   }
 
   $("startBtn").addEventListener("click", () => {
@@ -644,23 +578,24 @@ document.addEventListener("DOMContentLoaded", () => {
   function checkAnswer() {
     const value = normalize($("answerInput").value);
     if (!value) {
-      feedback("answerFeedback", "Enter a location first!", false);
+      feedback("answerFeedback", "Enter an answer first!", false);
       soundWrong();
       return;
     }
     const clue = clues[currentClue];
     if (clue.answers.some(answer => normalize(answer) === value)) {
       soundCorrect();
-      feedback("answerFeedback", "✓ Correct! You found the right location.", true);
+      feedback("answerFeedback", "✓ Correct! You know your Halloween history.", true);
       $("locationMessage").textContent = clue.location + " " + clue.next;
       $("codeArea").classList.remove("hidden");
       $("answerInput").disabled = true;
+      $("answerBtn").disabled = true;
       $("answerBtn").disabled = true;
       $("answerBtn").textContent = "ANSWER FOUND ✓";
       $("codeInput").focus({preventScroll:true});
     } else {
       soundWrong();
-      feedback("answerFeedback", "✕ Not quite. Think about the riddle and try again.", false);
+      feedback("answerFeedback", "✕ Incorrect! Think carefully and try again.", false);
       $("cluePanel").classList.remove("shake");
       void $("cluePanel").offsetWidth;
       $("cluePanel").classList.add("shake");
@@ -668,37 +603,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function checkCode() {
-    const value = normalize($("codeInput").value);
-    const expected = normalize(clues[currentClue].code);
-    if (value !== expected) {
+    if (normalize($("codeInput").value) !== normalize(clues[currentClue].code)) {
       soundWrong();
-      feedback("codeFeedback", "Incorrect secret code. Check the place carefully!", false);
+      feedback("codeFeedback", "Incorrect code. Check the indicated location!", false);
       return;
     }
-
     soundUnlock();
     toast("SECRET CODE ACCEPTED 🔓");
     currentClue++;
     updateProgress();
-
-    if (currentClue < clues.length) {
-      setTimeout(loadClue, 650);
-    } else {
-      setTimeout(() => {
-        feedback("pumpkinFeedback", "Your four location codes are accepted. Break the curse!", true);
-        showSection("pumpkinPanel");
-      }, 650);
-    }
+    if (currentClue < clues.length) setTimeout(loadClue, 650);
+    else setTimeout(() => {
+      feedback("pumpkinFeedback", "All four questions complete! Break the curse!", true);
+      showSection("pumpkinPanel");
+    }, 650);
   }
 
   $("answerBtn").addEventListener("click", checkAnswer);
   $("codeBtn").addEventListener("click", checkCode);
-  $("answerInput").addEventListener("keydown", e => {
-    if (e.key === "Enter") checkAnswer();
-  });
-  $("codeInput").addEventListener("keydown", e => {
-    if (e.key === "Enter") checkCode();
-  });
+  $("answerInput").addEventListener("keydown", e => { if (e.key === "Enter") checkAnswer(); });
+  $("codeInput").addEventListener("keydown", e => { if (e.key === "Enter") checkCode(); });
 
   $("pumpkinHit").addEventListener("click", () => {
     if (pumpkinHits >= 8) return;
@@ -706,7 +630,6 @@ document.addEventListener("DOMContentLoaded", () => {
     $("hitCount").textContent = pumpkinHits;
     $("hitFill").style.width = (pumpkinHits / 8 * 100) + "%";
     soundHit();
-
     const pumpkin = $("pumpkinHit");
     pumpkin.style.transform = "scale(.85) rotate(" + (Math.random() * 20 - 10) + "deg)";
     setTimeout(() => pumpkin.style.transform = "", 100);
@@ -732,8 +655,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     soundUnlock();
     feedback("pumpkinCodeFeedback", "Code accepted! Proceed to the teachers' stand.", true);
-
-    // QR contains a simple checkpoint message, not a guessed external website.
     const teacherQRText = "HALLOWEEN TREASURE HUNT - TEACHERS STAND - Ask the teacher for the final question and secret code.";
     $("teacherQR").src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(teacherQRText);
     setTimeout(() => showSection("teacherPanel"), 700);
@@ -742,13 +663,11 @@ document.addEventListener("DOMContentLoaded", () => {
   $("teacherCodeBtn").addEventListener("click", () => {
     if (normalize($("teacherCodeInput").value) !== normalize(teachersCode)) {
       soundWrong();
-      feedback("teacherFeedback", "That code is not correct. Ask the teachers after answering their final question.", false);
+      feedback("teacherFeedback", "That code is not correct. Answer the teachers' final question first.", false);
       return;
     }
     soundUnlock();
     feedback("teacherFeedback", "FINAL CODE ACCEPTED! The treasure is unlocked.", true);
-
-    // Final QR is a prize claim confirmation. No invented URL is used.
     const winnerQRText = "HALLOWEEN TREASURE HUNT - WINNER - Show this QR to the organizer to claim your prize.";
     $("winnerQR").src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(winnerQRText);
     setTimeout(() => {
@@ -758,13 +677,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 700);
   });
 
-  $("teacherCodeInput").addEventListener("keydown", e => {
-    if (e.key === "Enter") $("teacherCodeBtn").click();
-  });
-  $("pumpkinCodeInput").addEventListener("keydown", e => {
-    if (e.key === "Enter") $("pumpkinCodeBtn").click();
-  });
-
+  $("teacherCodeInput").addEventListener("keydown", e => { if (e.key === "Enter") $("teacherCodeBtn").click(); });
+  $("pumpkinCodeInput").addEventListener("keydown", e => { if (e.key === "Enter") $("pumpkinCodeBtn").click(); });
   updateProgress();
 });
 </script>
