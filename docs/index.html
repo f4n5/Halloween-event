@@ -551,60 +551,70 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ─── Scanner ───
   async function startScanner(expectedIndex) {
+    // always stop previous camera first
     await stopScanner();
+    // small delay so browser releases the camera stream
+    await new Promise(r => setTimeout(r, 250));
+
     currentStandIndex = expectedIndex;
     const stand = stands[expectedIndex];
     $("scanEyebrow").textContent = "SCAN STAND " + (expectedIndex + 1) + " OF " + stands.length;
     $("scanTitle").textContent = "Point camera at the QR";
     $("scanTarget").textContent = "Looking for: " + stand.name + " (" + stand.badge + ")";
-    $("scanStatus").textContent = "";
+    $("scanStatus").textContent = "Starting camera...";
     $("scanStatus").className = "scan-status";
+    // show scanner UI first
     showSection("scanPanel");
+
+    // clear reader div
+    const readerEl = $("reader");
+    readerEl.innerHTML = "";
 
     html5QrCode = new Html5Qrcode("reader");
     scanning = true;
     const config = { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 };
+
+    const onSuccess = (decodedText) => {
+      if (!scanning) return;
+      const sid = parseStandId(decodedText);
+      if (!sid) {
+        $("scanStatus").textContent = "QR not recognized. Use a stand QR.";
+        $("scanStatus").className = "scan-status err";
+        return;
+      }
+      const idx = stands.findIndex(s => s.id === sid);
+      if (idx < 0) {
+        $("scanStatus").textContent = "Unknown stand.";
+        $("scanStatus").className = "scan-status err";
+        return;
+      }
+      if (idx !== expectedIndex) {
+        $("scanStatus").textContent = "Wrong stand. Need: " + stand.name + " (got " + stands[idx].name + ")";
+        $("scanStatus").className = "scan-status err";
+        soundWrong();
+        return;
+      }
+      scanning = false;
+      $("scanStatus").textContent = "✓ " + stand.name + " found!";
+      $("scanStatus").className = "scan-status ok";
+      soundUnlock();
+      stopScanner().then(() => loadStand(idx)).catch(() => loadStand(idx));
+    };
+
     try {
-      await html5QrCode.start(
-        { facingMode: "environment" },
-        config,
-        (decodedText) => {
-          if (!scanning) return;
-          const sid = parseStandId(decodedText);
-          if (!sid) {
-            $("scanStatus").textContent = "QR not recognized. Use a stand QR.";
-            $("scanStatus").className = "scan-status err";
-            return;
-          }
-          const idx = stands.findIndex(s => s.id === sid);
-          if (idx < 0) {
-            $("scanStatus").textContent = "Unknown stand.";
-            $("scanStatus").className = "scan-status err";
-            return;
-          }
-          // must match the stand we are currently looking for
-          if (idx !== expectedIndex) {
-            $("scanStatus").textContent = "Wrong stand. Need: " + stand.name + " (got " + stands[idx].name + ")";
-            $("scanStatus").className = "scan-status err";
-            soundWrong();
-            return;
-          }
-          // lock immediately so html5-qrcode can't fire again
-          scanning = false;
-          $("scanStatus").textContent = "✓ " + stand.name + " found!";
-          $("scanStatus").className = "scan-status ok";
-          soundUnlock();
-          // stop camera then show question
-          stopScanner().then(() => {
-            loadStand(idx);
-          }).catch(() => loadStand(idx));
-        },
-        () => {} // ignore scan failures
-      );
-    } catch (err) {
-      $("scanStatus").textContent = "Camera error: " + (err.message || err);
-      $("scanStatus").className = "scan-status err";
-      toast("Allow camera permission and try again");
+      await html5QrCode.start({ facingMode: "environment" }, config, onSuccess, () => {});
+      $("scanStatus").textContent = "";
+    } catch (err1) {
+      // fallback: try any camera
+      try {
+        await html5QrCode.start({ facingMode: "user" }, config, onSuccess, () => {});
+        $("scanStatus").textContent = "";
+      } catch (err2) {
+        $("scanStatus").textContent = "Camera error. Allow permission and try again.";
+        $("scanStatus").className = "scan-status err";
+        toast("Camera blocked — allow permission");
+        console.error(err1, err2);
+      }
     }
   }
 
@@ -612,11 +622,17 @@ document.addEventListener("DOMContentLoaded", () => {
     scanning = false;
     if (html5QrCode) {
       try {
-        if (html5QrCode.isScanning) await html5QrCode.stop();
-        html5QrCode.clear();
+        const state = html5QrCode.getState && html5QrCode.getState();
+        // 2 = SCANNING in html5-qrcode
+        if (html5QrCode.isScanning || state === 2) {
+          await html5QrCode.stop();
+        }
       } catch (e) {}
+      try { html5QrCode.clear(); } catch (e) {}
       html5QrCode = null;
     }
+    const readerEl = $("reader");
+    if (readerEl) readerEl.innerHTML = "";
   }
 
   $("stopScanBtn").addEventListener("click", async () => {
@@ -694,14 +710,14 @@ document.addEventListener("DOMContentLoaded", () => {
           $("nextMessage").textContent = "All stands cleared!";
           $("nextStandName").textContent = "Go to the Cursed Pumpkin";
           $("goScanNextBtn").textContent = "🎃 OPEN PUMPKIN";
-          $("goScanNextBtn").onclick = () => showSection("pumpkinPanel");
+          $("goScanNextBtn").dataset.next = "pumpkin";
           $("nextBox").classList.remove("hidden");
         } else {
           const next = stands[nextProgress];
           $("nextMessage").textContent = "Go to the next stand and scan its QR:";
           $("nextStandName").textContent = next.name + " (" + next.badge + ")";
           $("goScanNextBtn").textContent = "📷 SCAN NEXT STAND";
-          $("goScanNextBtn").onclick = () => startScanner(nextProgress);
+          $("goScanNextBtn").dataset.next = String(nextProgress);
           $("nextBox").classList.remove("hidden");
           toast("Correct! Next stand →");
         }
@@ -717,9 +733,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $("answerBtn").addEventListener("click", checkAnswer);
   $("goScanNextBtn").addEventListener("click", () => {
-    const p = getProgress();
-    if (p >= stands.length) showSection("pumpkinPanel");
-    else startScanner(p);
+    const next = $("goScanNextBtn").dataset.next;
+    if (next === "pumpkin" || getProgress() >= stands.length) {
+      showSection("pumpkinPanel");
+      return;
+    }
+    const idx = parseInt(next || String(getProgress()), 10);
+    if (isNaN(idx) || idx < 0 || idx >= stands.length) {
+      startScanner(getProgress());
+    } else {
+      startScanner(idx);
+    }
   });
 
   // ─── Pumpkin ───
