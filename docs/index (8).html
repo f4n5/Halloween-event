@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Halloween Treasure Hunt 🎃</title>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+:root {
+  --orange: #ff7518;
+  --gold: #ffb347;
+  --bg: #09070d;
+  --muted: #aaa2b6;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  color: white;
+  background:
+    radial-gradient(ellipse at 50% 0%, #35152a 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 90%, #25112e 0%, transparent 45%),
+    var(--bg);
+  font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: radial-gradient(#fff 1px, transparent 1px);
+  background-size: 36px 36px;
+  z-index: 0;
+}
+button, input { font: inherit; }
+button { cursor: pointer; border: none; }
+button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.topbar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 5%;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(9,7,13,0.85);
+  backdrop-filter: blur(8px);
+}
+.brand { color: var(--orange); font-weight: 900; letter-spacing: 2.5px; font-size: 18px; }
+.audio-controls { display: flex; gap: 8px; flex-wrap: wrap; }
+.small-btn {
+  color: white; background: #211927; border: 1px solid #55405c;
+  padding: 8px 14px; border-radius: 8px; font-size: 13px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.small-btn:hover { border-color: var(--orange); background: #2a1f30; }
+main {
+  width: min(640px, 92%);
+  margin: 28px auto 60px;
+  position: relative;
+  z-index: 1;
+}
+.hero { text-align: center; margin-bottom: 22px; }
+.pumpkin {
+  font-size: clamp(70px, 18vw, 110px);
+  display: inline-block;
+  filter: drop-shadow(0 0 28px rgba(255,117,24,0.45));
+  animation: float 3.2s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-10px) rotate(3deg); }
+}
+h1 {
+  font-size: clamp(28px, 7vw, 46px);
+  line-height: 1.05;
+  margin: 8px 0 6px;
+  letter-spacing: -1px;
+  font-weight: 800;
+}
+h1 span { color: var(--orange); }
+.subtitle { color: var(--muted); font-size: 15px; line-height: 1.55; }
+.progress-area { margin-bottom: 18px; }
+.progress-label {
+  display: flex; justify-content: space-between;
+  color: var(--muted); font-size: 12px; margin-bottom: 7px; letter-spacing: 0.5px;
+}
+.progress-track { height: 7px; background: #2a1f30; border-radius: 20px; overflow: hidden; }
+.progress-fill {
+  width: 0%; height: 100%;
+  background: linear-gradient(90deg, var(--orange), var(--gold));
+  transition: width 0.45s ease; border-radius: 20px;
+}
+.panel {
+  background: linear-gradient(160deg, #1a1422, #100d16);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 18px;
+  padding: clamp(20px, 5vw, 32px);
+  box-shadow: 0 22px 60px rgba(0,0,0,0.45);
+}
+.hidden { display: none !important; }
+.eyebrow {
+  color: var(--orange); font-size: 11px; font-weight: 800;
+  letter-spacing: 2.2px; text-transform: uppercase; margin-bottom: 4px;
+}
+h2 { margin: 6px 0 14px; font-size: 24px; font-weight: 700; }
+p { line-height: 1.65; margin-bottom: 10px; }
+.muted { color: var(--muted); font-size: 14.5px; }
+.primary {
+  display: block; width: 100%; margin-top: 18px; padding: 15px 18px;
+  border-radius: 10px; color: #160b06; font-weight: 800; font-size: 15px;
+  background: linear-gradient(110deg, #ff7518, #ffc04b);
+  box-shadow: 0 6px 22px rgba(255,117,24,0.28);
+  transition: transform 0.15s, filter 0.15s;
+}
+.primary:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.primary:disabled { opacity: 0.7; cursor: default; transform: none; }
+.feedback {
+  margin-top: 14px; padding: 12px 14px; border-radius: 9px;
+  background: rgba(255,255,255,0.04); min-height: 22px; font-size: 14px;
+}
+.feedback.good { color: #75ffac; }
+.feedback.bad { color: #ff7777; }
+.clue-number {
+  display: inline-block; border: 1px solid #784322; color: var(--gold);
+  background: rgba(255,117,24,0.1); border-radius: 6px;
+  padding: 4px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 12px;
+}
+.riddle { font-size: 17px; line-height: 1.7; margin: 16px 0 18px; color: #f0eaf5; }
+.answers { display: grid; gap: 10px; margin-top: 6px; }
+.answer-option {
+  display: flex; align-items: flex-start; gap: 14px; width: 100%; text-align: left;
+  padding: 14px 16px; border: 1.5px solid #49364f; border-radius: 12px;
+  color: white; background: #17111e;
+  transition: border-color 0.18s, background 0.18s, transform 0.12s;
+  font-size: 15px; line-height: 1.45;
+}
+.answer-option:hover:not(:disabled) {
+  border-color: var(--orange); background: #241725; transform: translateX(3px);
+}
+.answer-option.selected {
+  border-color: var(--orange); background: rgba(255,117,24,0.15);
+  box-shadow: inset 0 0 0 1px rgba(255,117,24,0.4);
+}
+.answer-option:disabled { cursor: default; opacity: 0.85; }
+.letter {
+  display: grid; place-items: center; flex-shrink: 0;
+  width: 32px; height: 32px; border-radius: 8px;
+  background: #302438; color: var(--gold); font-weight: 900; font-size: 15px;
+}
+.answer-option.selected .letter { background: var(--orange); color: #1b0b02; }
+.pumpkin-game { text-align: center; margin: 18px 0; }
+.pumpkin-hit {
+  font-size: 90px; background: transparent; border: 0;
+  filter: drop-shadow(0 0 18px rgba(255,117,24,0.35));
+  transition: transform 0.08s; line-height: 1; padding: 10px;
+}
+.pumpkin-hit:active { transform: scale(0.88) rotate(-6deg); }
+.hit-counter { color: var(--gold); font-size: 26px; font-weight: 900; margin-top: 8px; }
+.stand-badge {
+  display: inline-block; background: rgba(255,117,24,0.15);
+  border: 1px solid #784322; color: var(--gold);
+  padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; margin-bottom: 12px;
+}
+.next-box {
+  margin-top: 20px; padding: 18px; border-radius: 12px;
+  background: rgba(255,117,24,0.1); border: 1px solid #784322; text-align: center;
+}
+.next-box strong { color: var(--gold); font-size: 18px; }
+.final-card { text-align: center; }
+.final-emoji { font-size: 72px; margin-bottom: 8px; }
+.footer { text-align: center; padding: 22px 10px 30px; color: #7d7286; font-size: 12px; letter-spacing: 0.5px; }
+#toast {
+  position: fixed; bottom: 22px; left: 50%; transform: translate(-50%, 20px);
+  opacity: 0; z-index: 50; background: #251b2c; border: 1px solid #684b72;
+  padding: 13px 20px; border-radius: 11px; pointer-events: none;
+  transition: 0.28s ease; text-align: center; width: max-content; max-width: 90%;
+  font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+.shake { animation: shake 0.28s; }
+
+/* Scanner */
+#reader {
+  width: 100%;
+  max-width: 400px;
+  margin: 16px auto;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+#reader video { border-radius: 12px; }
+.scan-hint {
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 12px;
+}
+.scan-status {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+  min-height: 22px;
+}
+.scan-status.ok { color: #75ffac; }
+.scan-status.err { color: #ff7777; }
+
+@media (max-width: 480px) {
+  .topbar { align-items: flex-start; padding: 12px 4%; }
+  .audio-controls { justify-content: flex-end; }
+  main { margin-top: 20px; }
+  .answer-option { padding: 13px 14px; gap: 12px; }
+  .letter { width: 28px; height: 28px; font-size: 14px; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">HALLOWEEN</div>
+  <div class="audio-controls">
+    <button class="small-btn" id="musicBtn">♫ Music</button>
+    <button class="small-btn" id="soundBtn">🔊 Sound ON</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="pumpkin">🎃</div>
+    <h1>HALLOWEEN<br><span>TREASURE HUNT</span></h1>
+    <p class="subtitle">Scan each stand QR with this page’s camera.<br>One question per stand. Then the pumpkin.</p>
+  </section>
+
+  <div class="progress-area">
+    <div class="progress-label">
+      <span id="progressText">YOUR PROGRESS</span>
+      <span id="progressCount">0 / 5 stands</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <section class="panel" id="intro">
+    <div class="eyebrow">⚠️ The hunt begins</div>
+    <h2>Welcome, brave explorer.</h2>
+    <p>Go to the <strong>French Stand</strong>, open this page, and tap the button below. Point your camera at the QR on the stand.</p>
+    <p class="muted">Order: French → English → Portuguese → Spanish → Chinese → Pumpkin</p>
+    <button class="primary" id="startScanBtn">📷 SCAN FIRST STAND QR</button>
+  </section>
+
+  <!-- SCANNER -->
+  <section class="panel hidden" id="scanPanel">
+    <div class="eyebrow" id="scanEyebrow">SCAN STAND</div>
+    <h2 id="scanTitle">Point camera at the QR</h2>
+    <p class="muted" id="scanTarget">Looking for: French Stand</p>
+    <div id="reader"></div>
+    <p class="scan-hint">Hold steady. Camera will read the stand QR automatically.</p>
+    <div class="scan-status" id="scanStatus"></div>
+    <button class="primary" id="stopScanBtn" style="margin-top:14px;background:#3a2a3a;color:#ccc;box-shadow:none;">Stop camera</button>
+  </section>
+
+  <!-- QUESTION -->
+  <section class="panel hidden" id="standPanel">
+    <div class="eyebrow" id="standEyebrow">STAND</div>
+    <h2 id="standTitle">Stand</h2>
+    <div class="stand-badge" id="standBadge">LANGUAGE</div>
+    <span class="clue-number">ONE RANDOM QUESTION</span>
+    <p class="riddle" id="riddleText"></p>
+    <div class="answers" id="answers"></div>
+    <button class="primary" id="answerBtn">CONFIRM ANSWER</button>
+    <div class="feedback" id="answerFeedback" aria-live="polite">Select one option.</div>
+    <div class="hidden" id="nextBox">
+      <div class="next-box">
+        <p>✓ Correct!</p>
+        <p id="nextMessage">Go to the next stand and scan its QR:</p>
+        <p><strong id="nextStandName"></strong></p>
+        <button class="primary" id="goScanNextBtn" style="margin-top:14px;">📷 SCAN NEXT STAND</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PUMPKIN -->
+  <section class="panel hidden" id="pumpkinPanel">
+    <div class="eyebrow">FINAL CHALLENGE</div>
+    <h2>The cursed pumpkin</h2>
+    <p class="muted">All stands cleared. Tap the pumpkin <strong>8 times</strong> to break the curse.</p>
+    <div class="pumpkin-game">
+      <button class="pumpkin-hit" id="pumpkinHit" aria-label="Hit the pumpkin">🎃</button>
+      <div class="hit-counter"><span id="hitCount">0</span> / 8</div>
+      <div class="progress-track" style="margin-top:14px; max-width:220px; margin-left:auto; margin-right:auto;">
+        <div class="progress-fill" id="hitFill"></div>
+      </div>
+    </div>
+    <div class="feedback" id="pumpkinFeedback" aria-live="polite">Don't stop now...</div>
+    <div class="hidden" id="pumpkinDone">
+      <div class="next-box" style="margin-top:20px;">
+        <p>💥 THE CURSE IS BROKEN!</p>
+        <p><strong>Go to the Prize Stand</strong></p>
+        <p class="muted" style="margin-top:8px;">Show this screen to the organizer.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WINNER -->
+  <section class="panel hidden final-card" id="winnerPanel">
+    <div class="final-emoji">🏆🎃</div>
+    <div class="eyebrow">YOU DID IT</div>
+    <h2>THE TREASURE IS YOURS!</h2>
+    <p>You conquered every language stand and broke the curse.</p>
+    <p class="muted" style="margin-top:16px;">Happy Halloween, brave explorer. 👻</p>
+  </section>
+</main>
+
+<div class="footer">HAPPY HALLOWEEN • GOOD LUCK 👻</div>
+<div id="toast" role="status"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const stands = [
+    {
+      id: "french",
+      name: "French Stand",
+      badge: "FRANÇAIS",
+      questions: [
+        { riddle: "Je suis un animal. Je fais « Hou hou ! ». Je vole la nuit. Qui suis-je ?", answers: ["Une chouette", "Une poule", "Un canard", "Un pingouin"], correct: 0 },
+        { riddle: "Je suis une maison. Je suis vieille et sombre. Il y a des fantômes. Qui suis-je ?", answers: ["Une école", "Une boulangerie", "Une piscine", "Une maison hantée"], correct: 3 },
+        { riddle: "Je suis un jour spécial. On porte des costumes et on mange des bonbons. Qui suis-je ?", answers: ["Noël", "Halloween", "Pâques", "Le Nouvel An"], correct: 1 },
+        { riddle: "Je suis un animal noir. Je fais « Miaou ! ». Qui suis-je ?", answers: ["Un chien", "Un chat", "Un corbeau", "Une chauve-souris"], correct: 1 },
+        { riddle: "Je suis un monstre. J’ai de grandes dents. Je bois du sang. Qui suis-je ?", answers: ["Un vampire", "Un fantôme", "Un squelette", "Un robot"], correct: 0 }
+      ]
+    },
+    {
+      id: "english",
+      name: "English Stand",
+      badge: "ENGLISH",
+      questions: [
+        { riddle: "I am a monster. I have long teeth. I drink blood. Who am I?", answers: ["A vampire", "A ghost", "A skeleton", "A robot"], correct: 0 },
+        { riddle: "I am white and I can fly. People say I live in old houses. Who am I?", answers: ["A witch", "A pumpkin", "A ghost", "A black cat"], correct: 2 },
+        { riddle: "I am orange and round. People make scary faces on me for Halloween. What am I?", answers: ["An apple", "A pumpkin", "A spider", "A moon"], correct: 1 },
+        { riddle: "I am a woman with magical powers. I often wear a pointed hat and fly on a broom. Who am I?", answers: ["A princess", "A vampire", "A ghost", "A witch"], correct: 3 },
+        { riddle: "I am an animal. I am black, I have wings and I fly at night. What am I?", answers: ["A bat", "A cat", "A spider", "A snake"], correct: 0 }
+      ]
+    },
+    {
+      id: "portuguese",
+      name: "Portuguese Stand",
+      badge: "PORTUGUÊS",
+      questions: [
+        { riddle: "Sou um monstro. Tenho dentes grandes e bebo sangue. Quem sou eu?", answers: ["Um fantasma", "Um vampiro", "Um esqueleto", "Um robô"], correct: 1 },
+        { riddle: "Sou branca e posso voar. Nas histórias, apareço em casas antigas. Quem sou eu?", answers: ["Uma abóbora", "Uma aranha", "Uma bruxa", "Um fantasma"], correct: 3 },
+        { riddle: "Sou laranja e redonda. No Halloween, as pessoas fazem rostos assustadores em mim. O que sou eu?", answers: ["Uma laranja", "Uma bola", "Uma abóbora", "Uma lua"], correct: 2 },
+        { riddle: "Sou uma mulher com poderes mágicos. Uso um chapéu pontudo e voo numa vassoura. Quem sou eu?", answers: ["Uma bruxa", "Uma princesa", "Uma vampira", "Uma fada"], correct: 0 },
+        { riddle: "Sou um animal pequeno. Tenho oito pernas e faço teias. O que sou eu?", answers: ["Um morcego", "Uma cobra", "Uma borboleta", "Uma aranha"], correct: 3 }
+      ]
+    },
+    {
+      id: "spanish",
+      name: "Spanish Stand",
+      badge: "ESPAÑOL",
+      questions: [
+        { riddle: "Soy una mujer que aparece en la noche. Lloro y busco a mis hijos. Mi historia se cuenta en distintos países de América Latina. ¿Quién soy?", answers: ["La Pincoya", "La Llorona", "La Calchona", "La Cegua"], correct: 1 },
+        { riddle: "Soy un barco fantasma. Navego por los mares de Chiloé y, según la leyenda, llevo música y luces. ¿Quién soy?", answers: ["El Trauco", "El Alicanto", "El Caleuche", "El Invunche"], correct: 2 },
+        { riddle: "Soy un ser pequeño de la tradición chilota. Vivo en el bosque y llevo un bastón. ¿Quién soy?", answers: ["El Trauco", "El Caleuche", "El Tue-Tué", "El Alicanto"], correct: 0 },
+        { riddle: "Soy un animal fantástico de las leyendas del norte de Chile. Brillo en la oscuridad y me alimento de oro o plata. ¿Quién soy?", answers: ["El Chonchón", "El Camahueto", "El Peuchén", "El Alicanto"], correct: 3 },
+        { riddle: "Soy una mujer misteriosa de una leyenda española. Aparezco cerca de un castillo y estoy relacionada con un tesoro escondido. ¿Quién soy?", answers: ["La Llorona", "La dama de la corte", "La mora encantada", "La Pincoya"], correct: 2 }
+      ]
+    },
+    {
+      id: "chinese",
+      name: "Chinese Stand",
+      badge: "中文",
+      questions: [
+        { riddle: "En chino, Halloween se escribe 万圣节 (Wànshèngjié). ¿A qué celebración se refiere esta expresión?", answers: ["Al Año Nuevo chino", "A Halloween", "Al Festival de los Faroles", "Al Festival del Medio Otoño"], correct: 1 },
+        { riddle: "El carácter 鬼 se pronuncia guǐ. ¿Qué significa?", answers: ["Calabaza", "Bruja", "Fantasma", "Murciélago"], correct: 2 },
+        { riddle: "Una calabaza puede convertirse en una decoración de Halloween. ¿Cómo se dice «calabaza» en chino?", answers: ["南瓜 (nánguā)", "糖果 (tángguǒ)", "蜘蛛 (zhīzhū)", "月亮 (yuèliang)"], correct: 0 },
+        { riddle: "Durante Halloween, algunas personas piden dulces. En chino, «dulces» se dice tángguǒ. ¿Cuál de las siguientes palabras significa «dulces»?", answers: ["女巫", "黑猫", "鬼", "糖果"], correct: 3 },
+        { riddle: "En los disfraces de Halloween puede aparecer una 女巫 (nǚwū). ¿Qué personaje representa esta palabra?", answers: ["Una princesa", "Una bruja", "Una gata negra", "Una araña"], correct: 1 }
+      ]
+    }
+  ];
+
+  const $ = id => document.getElementById(id);
+  const sections = ["intro", "scanPanel", "standPanel", "pumpkinPanel", "winnerPanel"];
+  let currentStandIndex = 0;
+  let currentQuestion = null;
+  let selectedAnswer = null;
+  let answerLocked = false;
+  let pumpkinHits = 0;
+  let musicOn = false;
+  let soundOn = true;
+  let audioCtx = null;
+  let musicTimer = null;
+  let noteIndex = 0;
+  let toastTimer = null;
+  let explosionPlayed = false;
+  let html5QrCode = null;
+  let scanning = false;
+
+  const STORAGE_KEY = "halloween_hunt_progress_v2";
+  function getProgress() {
+    try {
+      const p = parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10);
+      return isNaN(p) ? 0 : Math.max(0, Math.min(p, stands.length));
+    } catch (e) { return 0; }
+  }
+  function setProgress(n) {
+    try { localStorage.setItem(STORAGE_KEY, String(n)); } catch (e) {}
+  }
+
+  function showSection(id) {
+    sections.forEach(s => $(s).classList.toggle("hidden", s !== id));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function toast(message) {
+    $("toast").textContent = message;
+    $("toast").classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => $("toast").classList.remove("show"), 2400);
+  }
+
+  function feedback(id, message, good) {
+    const el = $(id);
+    el.textContent = message;
+    el.className = "feedback " + (good ? "good" : "bad");
+  }
+
+  function updateProgressBar() {
+    const count = getProgress();
+    $("progressCount").textContent = count + " / " + stands.length + " stands";
+    $("progressFill").style.width = (count / stands.length * 100) + "%";
+    $("progressText").textContent = count >= stands.length ? "ALL STANDS COMPLETE" : "YOUR PROGRESS";
+  }
+
+  // ─── Audio ───
+  function initAudio() {
+    if (!audioCtx) {
+      const C = window.AudioContext || window.webkitAudioContext;
+      if (!C) return false;
+      audioCtx = new C();
+    }
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    return true;
+  }
+  function tone(freq, duration, type = "sine", volume = 0.15, delay = 0, endFreq = null) {
+    if (!soundOn || !initAudio()) return;
+    const now = audioCtx.currentTime + delay;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const filter = audioCtx.createBiquadFilter();
+    osc.type = type;
+    osc.frequency.setValueAtTime(Math.max(20, freq), now);
+    if (endFreq !== null) osc.frequency.exponentialRampToValueAtTime(Math.max(20, endFreq), now + duration);
+    filter.type = "lowpass"; filter.frequency.value = 4500;
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(Math.max(0.0002, volume), now + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    osc.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(now); osc.stop(now + duration + 0.04);
+  }
+  function noiseBurst(duration = 0.35, volume = 0.16, lowpass = 1200) {
+    if (!soundOn || !initAudio()) return;
+    const length = Math.floor(audioCtx.sampleRate * duration);
+    const buffer = audioCtx.createBuffer(1, length, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / length);
+    const source = audioCtx.createBufferSource();
+    const filter = audioCtx.createBiquadFilter();
+    const gain = audioCtx.createGain();
+    source.buffer = buffer; filter.type = "lowpass"; filter.frequency.value = lowpass;
+    gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    source.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination); source.start();
+  }
+  function soundCorrect() {
+    tone(523, 0.16, "triangle", 0.2); tone(659, 0.18, "triangle", 0.2, 0.12);
+    tone(784, 0.28, "triangle", 0.22, 0.25); tone(1046, 0.4, "sine", 0.15, 0.42);
+  }
+  function soundWrong() {
+    tone(180, 0.3, "sawtooth", 0.16, 0, 95); tone(115, 0.35, "square", 0.09, 0.12, 65); noiseBurst(0.18, 0.07, 600);
+  }
+  function soundUnlock() {
+    tone(110, 0.45, "sine", 0.28, 0, 220); tone(440, 0.5, "triangle", 0.15, 0.1, 880);
+    tone(880, 0.7, "sine", 0.12, 0.25, 1320); noiseBurst(0.25, 0.08, 2600);
+  }
+  function soundHit() {
+    tone(115, 0.13, "sine", 0.24, 0, 65); noiseBurst(0.12, 0.14, 700); tone(210, 0.1, "triangle", 0.08, 0.02, 110);
+  }
+  function soundExplosion() {
+    noiseBurst(0.9, 0.42, 1800); tone(75, 1.1, "sine", 0.4, 0, 28);
+    tone(55, 0.9, "triangle", 0.24, 0.08, 30); tone(400, 0.4, "sawtooth", 0.12, 0.15, 65);
+    setTimeout(() => { tone(880, 0.7, "sine", 0.16); tone(660, 0.7, "triangle", 0.12, 0.15); tone(440, 0.9, "sine", 0.12, 0.3); }, 500);
+  }
+  function musicStep() {
+    if (!musicOn || !audioCtx) return;
+    const step = noteIndex % 16;
+    const bass = [55, 55, 65.4, 55, 49, 49, 73.4, 65.4];
+    const eerie = [220, 0, 261.6, 233.1, 0, 196, 207.7, 0, 293.7, 0, 261.6, 220, 0, 174.6, 207.7, 0];
+    tone(bass[step % bass.length], 0.85, "triangle", 0.11, 0, bass[step % bass.length] * 0.94);
+    if (step % 4 === 0) { tone(82.4, 1.4, "sine", 0.14, 0, 41.2); tone(164.8, 0.7, "sawtooth", 0.025, 0.05, 82.4); }
+    if (eerie[step]) tone(eerie[step], 0.65, "sine", 0.075, 0.02, eerie[step] * 0.96);
+    if (step === 7 || step === 15) tone(1046, 0.8, "triangle", 0.035, 0.1, 523);
+    if (step === 11) noiseBurst(0.18, 0.035, 500);
+    noteIndex++;
+  }
+  function startMusic() {
+    if (!initAudio()) return;
+    musicOn = true; $("musicBtn").textContent = "♫ Music ON"; $("musicBtn").style.borderColor = "#ff7518";
+    if (musicTimer) clearInterval(musicTimer); musicStep(); musicTimer = setInterval(musicStep, 430);
+  }
+  function stopMusic() {
+    musicOn = false; $("musicBtn").textContent = "♫ Music"; $("musicBtn").style.borderColor = "";
+    if (musicTimer) clearInterval(musicTimer); musicTimer = null;
+  }
+  $("musicBtn").addEventListener("click", () => { if (musicOn) { stopMusic(); toast("Music paused."); } else startMusic(); });
+  $("soundBtn").addEventListener("click", () => {
+    soundOn = !soundOn; $("soundBtn").textContent = soundOn ? "🔊 Sound ON" : "🔇 Sound OFF";
+    if (soundOn) { initAudio(); tone(600, 0.15, "triangle", 0.12); }
+  });
+
+  // ─── Parse stand id from scanned text ───
+  function parseStandId(text) {
+    if (!text) return null;
+    text = text.trim().toLowerCase();
+    // direct id
+    const ids = stands.map(s => s.id);
+    if (ids.includes(text)) return text;
+    // URL with ?stand=
+    try {
+      const u = new URL(text);
+      const s = (u.searchParams.get("stand") || "").toLowerCase();
+      if (ids.includes(s)) return s;
+    } catch (e) {}
+    // loose match inside string
+    for (const id of ids) {
+      if (text.includes("stand=" + id) || text.includes("/" + id) || text.endsWith(id)) return id;
+    }
+    return null;
+  }
+
+  // ─── Scanner ───
+  async function startScanner(expectedIndex) {
+    await stopScanner();
+    currentStandIndex = expectedIndex;
+    const stand = stands[expectedIndex];
+    $("scanEyebrow").textContent = "SCAN STAND " + (expectedIndex + 1) + " OF " + stands.length;
+    $("scanTitle").textContent = "Point camera at the QR";
+    $("scanTarget").textContent = "Looking for: " + stand.name + " (" + stand.badge + ")";
+    $("scanStatus").textContent = "";
+    $("scanStatus").className = "scan-status";
+    showSection("scanPanel");
+
+    html5QrCode = new Html5Qrcode("reader");
+    scanning = true;
+    const config = { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 };
+    try {
+      await html5QrCode.start(
+        { facingMode: "environment" },
+        config,
+        (decodedText) => {
+          if (!scanning) return;
+          const sid = parseStandId(decodedText);
+          if (!sid) {
+            $("scanStatus").textContent = "QR not recognized. Use a stand QR.";
+            $("scanStatus").className = "scan-status err";
+            return;
+          }
+          const idx = stands.findIndex(s => s.id === sid);
+          if (idx !== expectedIndex) {
+            $("scanStatus").textContent = "Wrong stand. Scan " + stand.name + ".";
+            $("scanStatus").className = "scan-status err";
+            soundWrong();
+            return;
+          }
+          // correct stand
+          scanning = false;
+          $("scanStatus").textContent = "✓ " + stand.name + " found!";
+          $("scanStatus").className = "scan-status ok";
+          soundUnlock();
+          stopScanner().then(() => loadStand(idx));
+        },
+        () => {} // ignore scan failures
+      );
+    } catch (err) {
+      $("scanStatus").textContent = "Camera error: " + (err.message || err);
+      $("scanStatus").className = "scan-status err";
+      toast("Allow camera permission and try again");
+    }
+  }
+
+  async function stopScanner() {
+    scanning = false;
+    if (html5QrCode) {
+      try {
+        if (html5QrCode.isScanning) await html5QrCode.stop();
+        html5QrCode.clear();
+      } catch (e) {}
+      html5QrCode = null;
+    }
+  }
+
+  $("stopScanBtn").addEventListener("click", async () => {
+    await stopScanner();
+    const p = getProgress();
+    if (p >= stands.length) showSection("pumpkinPanel");
+    else if (p === 0) showSection("intro");
+    else {
+      $("nextStandName").textContent = stands[p].name;
+      showSection("standPanel");
+      $("nextBox").classList.remove("hidden");
+    }
+  });
+
+  // ─── Question ───
+  function loadStand(index) {
+    currentStandIndex = index;
+    const stand = stands[index];
+    currentQuestion = stand.questions[Math.floor(Math.random() * stand.questions.length)];
+    selectedAnswer = null;
+    answerLocked = false;
+
+    $("standEyebrow").textContent = "STAND " + (index + 1) + " OF " + stands.length;
+    $("standTitle").textContent = stand.name;
+    $("standBadge").textContent = stand.badge;
+    $("riddleText").textContent = currentQuestion.riddle;
+    $("answers").innerHTML = "";
+    $("nextBox").classList.add("hidden");
+    $("answerBtn").classList.remove("hidden");
+    $("answerBtn").disabled = false;
+    $("answerBtn").textContent = "CONFIRM ANSWER";
+
+    currentQuestion.answers.forEach((answer, i) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "answer-option";
+      button.innerHTML = '<span class="letter">' + String.fromCharCode(65 + i) + '</span><span></span>';
+      button.querySelector("span:last-child").textContent = answer;
+      button.addEventListener("click", () => {
+        if (answerLocked) return;
+        selectedAnswer = i;
+        $("answers").querySelectorAll(".answer-option").forEach(b => b.classList.remove("selected"));
+        button.classList.add("selected");
+        feedback("answerFeedback", "Selected option " + String.fromCharCode(65 + i) + ". Confirm when ready.", true);
+      });
+      $("answers").appendChild(button);
+    });
+    feedback("answerFeedback", "Choose one of the four answers (A, B, C or D).", true);
+    updateProgressBar();
+    showSection("standPanel");
+  }
+
+  function checkAnswer() {
+    if (selectedAnswer === null) {
+      feedback("answerFeedback", "Select an answer first!", false);
+      soundWrong();
+      return;
+    }
+    if (answerLocked) return;
+
+    if (selectedAnswer === currentQuestion.correct) {
+      answerLocked = true;
+      soundCorrect();
+      $("answers").querySelectorAll(".answer-option").forEach(b => b.disabled = true);
+      $("answerBtn").disabled = true;
+      $("answerBtn").textContent = "CORRECT ✓";
+      feedback("answerFeedback", "✓ Correct!", true);
+
+      const nextProgress = currentStandIndex + 1;
+      setProgress(nextProgress);
+      updateProgressBar();
+
+      setTimeout(() => {
+        if (nextProgress >= stands.length) {
+          $("nextMessage").textContent = "All stands cleared!";
+          $("nextStandName").textContent = "Go to the Cursed Pumpkin";
+          $("goScanNextBtn").textContent = "🎃 OPEN PUMPKIN";
+          $("goScanNextBtn").onclick = () => showSection("pumpkinPanel");
+          $("nextBox").classList.remove("hidden");
+        } else {
+          const next = stands[nextProgress];
+          $("nextMessage").textContent = "Go to the next stand and scan its QR:";
+          $("nextStandName").textContent = next.name + " (" + next.badge + ")";
+          $("goScanNextBtn").textContent = "📷 SCAN NEXT STAND";
+          $("goScanNextBtn").onclick = () => startScanner(nextProgress);
+          $("nextBox").classList.remove("hidden");
+          toast("Correct! Next stand →");
+        }
+      }, 600);
+    } else {
+      soundWrong();
+      feedback("answerFeedback", "✕ Incorrect! Try another option.", false);
+      $("standPanel").classList.remove("shake");
+      void $("standPanel").offsetWidth;
+      $("standPanel").classList.add("shake");
+    }
+  }
+
+  $("answerBtn").addEventListener("click", checkAnswer);
+  $("goScanNextBtn").addEventListener("click", () => {
+    const p = getProgress();
+    if (p >= stands.length) showSection("pumpkinPanel");
+    else startScanner(p);
+  });
+
+  // ─── Pumpkin ───
+  $("pumpkinHit").addEventListener("click", () => {
+    if (pumpkinHits >= 8) return;
+    pumpkinHits++;
+    $("hitCount").textContent = pumpkinHits;
+    $("hitFill").style.width = (pumpkinHits / 8 * 100) + "%";
+    soundHit();
+    const pumpkin = $("pumpkinHit");
+    pumpkin.style.transform = "scale(0.85) rotate(" + (Math.random() * 20 - 10) + "deg)";
+    setTimeout(() => pumpkin.style.transform = "", 100);
+    if (pumpkinHits < 8) {
+      feedback("pumpkinFeedback", "The pumpkin trembles... " + (8 - pumpkinHits) + " more hit(s)!", true);
+    } else if (!explosionPlayed) {
+      explosionPlayed = true;
+      soundExplosion();
+      $("pumpkinHit").textContent = "💥";
+      feedback("pumpkinFeedback", "THE CURSE IS BROKEN!", true);
+      $("pumpkinDone").classList.remove("hidden");
+      toast("BOOOOM! 🎃💥");
+      setTimeout(() => showSection("winnerPanel"), 2000);
+    }
+  });
+
+  // ─── Entry ───
+  $("startScanBtn").addEventListener("click", () => {
+    initAudio();
+    if (!musicOn) startMusic();
+    setProgress(0);
+    startScanner(0);
+  });
+
+  updateProgressBar();
+  // if already finished previously
+  if (getProgress() >= stands.length) {
+    showSection("pumpkinPanel");
+  } else {
+    showSection("intro");
+  }
+});
+</script>
+</body>
+</html>
